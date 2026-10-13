@@ -1,149 +1,111 @@
-# Predicting-Product-Demand-from-Sales-and-Marketing-Campaigns
+# Black Week Demand Planning: Campaign-Aware Forecasting with Prophet
 
-"""
-External Regressors in Demand Forecasting — Campaign Planning Example
-Synthetic data only. No fabricated "real" numbers are claimed anywhere;
-this is a fictional product used purely to illustrate the mechanism.
-"""
+**Demand Forecasting · Part 2.** Part 1: [link to Part 1]
 
-import numpy as np
-import pandas as pd
-from prophet import Prophet
-from sklearn.metrics import mean_absolute_error, mean_squared_error
+> **All data is synthetic.** The retailer, suppliers and products are fictional. No real company data is used.
 
-np.random.seed(42)
+## The business question
 
-# ---------------------------------------------------------------
-# 1. Build a synthetic daily demand series (2 years)
-# ---------------------------------------------------------------
-n_days = 730
-dates = pd.date_range("2024-01-01", periods=n_days, freq="D")
+It is 12 October 2026. A mid-sized online home & kitchen retailer must commit stock for Black Week (23–30 November) before it knows what customers will buy. **How much will it really sell?**
 
-t = np.arange(n_days)
-trend = 200 + 0.12 * t                                   # slow upward trend
-weekly_season = 25 * np.sin(2 * np.pi * t / 7)            # weekly pattern
-annual_season = 40 * np.sin(2 * np.pi * t / 365.25)       # annual pattern
-noise = np.random.normal(0, 10, n_days)
+Two things make this hard:
 
-baseline_demand = trend + weekly_season + annual_season + noise
+1. **Stockouts hide demand.** 17 of 40 products sold out during Black Week 2024, and 18 in 2025. On those days, sales show available stock, not demand.
+2. **Few events to learn from.** Each product has seen only two Black Weeks.
 
-# ---------------------------------------------------------------
-# 2. Define planned campaigns (this is the "campaign planning" input)
-#    Each campaign has a start day, duration, and discount depth (%).
-#    Deeper discount -> larger demand uplift (with diminishing returns).
-# ---------------------------------------------------------------
-# Deliberately avoided: no campaign falls within 3 weeks of a real shopping
-# holiday (Black Friday/Cyber Monday, end-of-year), and no two campaigns
-# land in the same calendar week across different years. This keeps the
-# regressor's effect cleanly separable from anything the model's own
-# yearly seasonality term might otherwise learn.
-campaigns = [
-    {"start": 60,  "duration": 5,  "discount": 15},   # early March
-    {"start": 150, "duration": 3,  "discount": 30},   # late May
-    {"start": 240, "duration": 7,  "discount": 20},   # late August
-    {"start": 300, "duration": 4,  "discount": 40},   # late October (clear of Black Friday)
-    {"start": 400, "duration": 5,  "discount": 15},   # early February
-    {"start": 470, "duration": 3,  "discount": 25},   # mid April
-    {"start": 560, "duration": 7,  "discount": 35},   # mid July
-    {"start": 620, "duration": 4,  "discount": 20},   # early September
-    {"start": 685, "duration": 5,  "discount": 30},   # mid November, still 2+ weeks clear of Black Friday
-]
+## Approach
 
-is_campaign = np.zeros(n_days)
-campaign_intensity = np.zeros(n_days)  # normalized discount depth, 0-1 scale
+| Step | What | Why |
+|---|---|---|
+| 1 | **Stockout correction**: sold-out days set to missing | A sold-out day says demand was *at least* the sales, so it should not be treated as low demand |
+| 2 | **Pooled Black Week profile** learned across products that did not sell out | Single products have too few clean event days; this borrows strength across the catalog |
+| 3 | **Prophet with regressors**: Black Week profile + planned discount depth (`-log(1 - discount)`), Christmas holiday, multiplicative mode | Both regressors are known in advance from the campaign plan, so there is no leakage |
+| 4 | **Backtest**: plan as of 12 Oct 2025, forecast Black Week 2025 | Tests the method on an event it has not seen |
+| 5 | **Scenario ranges** from backtest errors (P10/P90 of actual ÷ forecast on products that did not sell out) | Prophet's own intervals ignore uncertainty in the event effect |
 
-for c in campaigns:
-    s, d, disc = c["start"], c["duration"], c["discount"]
-    is_campaign[s:s + d] = 1
-    campaign_intensity[s:s + d] = disc / 100.0
+Four models are compared: last year + growth (common planner shortcut), Prophet baseline (seasonality only, as in Part 1), Prophet + regressors on raw sales, and Prophet + regressors with stockout correction.
 
-# Uplift model: demand lifts roughly proportional to discount depth,
-# with diminishing returns (sqrt) and a bit of noise on the effect size.
-uplift_factor = 6.0
-demand_uplift = uplift_factor * np.sqrt(campaign_intensity) * baseline_demand * is_campaign
-uplift_noise = np.random.normal(0, 5, n_days) * is_campaign
+## Results
 
-actual_demand = baseline_demand + demand_uplift * 0.35 + uplift_noise
-actual_demand = np.clip(actual_demand, a_min=10, a_max=None)
+**Backtest: Black Week 2025, total across 40 products**
 
-df = pd.DataFrame({
-    "ds": dates,
-    "y": actual_demand,
-    "is_campaign": is_campaign,
-    "campaign_intensity": campaign_intensity,
-})
+| Model | Bias vs. true demand | WAPE vs. true demand |
+|---|---|---|
+| Last year + growth | −33% | 49% |
+| Prophet baseline | −63% | 64% |
+| Prophet + regressors (raw sales) | −42% | 48% |
+| **Prophet + regressors (stockouts fixed)** | **−10%** | **26%** |
 
-# ---------------------------------------------------------------
-# 3. Train/test split (last 60 days as holdout, includes 1 campaign)
-# ---------------------------------------------------------------
-holdout_days = 60
-train = df.iloc[:-holdout_days].copy()
-test = df.iloc[-holdout_days:].copy()
+The largest improvement comes from correcting the censored history, not from adding regressors alone.
 
-print(f"Train range: {train['ds'].min().date()} -> {train['ds'].max().date()} ({len(train)} days)")
-print(f"Test range:  {test['ds'].min().date()} -> {test['ds'].max().date()} ({len(test)} days)")
-print(f"Campaign days in test set: {int(test['is_campaign'].sum())}")
+**Scenarios.** Prophet's P10–P90 interval covered only 22% of backtest outcomes. Backtest-based multipliers (low ×0.79, high ×1.74) covered 72%. The range is asymmetric, so the risk is mostly to the upside.
 
-# ---------------------------------------------------------------
-# 4. Baseline model — no external regressor
-# ---------------------------------------------------------------
-baseline_model = Prophet(weekly_seasonality=True, yearly_seasonality=True, daily_seasonality=False)
-baseline_model.fit(train[["ds", "y"]])
+**Black Week 2026 forecast (all 40 products):** low 12.4k · expected 15.8k · high 27.4k units. Last year + growth would plan 12.7k.
 
-future_baseline = test[["ds"]].copy()
-fc_baseline = baseline_model.predict(future_baseline)
+![Backtest bias](output/results/chart1_backtest_bias.png)
+![Weighted blanket backtest](output/results/chart2_hero_sku_backtest.png)
+![2026 scenarios](output/results/chart3_2026_scenarios_top10.png)
 
-# ---------------------------------------------------------------
-# 5. Enriched model — with campaign_intensity as external regressor
-# ---------------------------------------------------------------
-enriched_model = Prophet(weekly_seasonality=True, yearly_seasonality=True, daily_seasonality=False)
-enriched_model.add_regressor("campaign_intensity")
-enriched_model.fit(train[["ds", "y", "campaign_intensity"]])
+## Limitations
 
-future_enriched = test[["ds", "campaign_intensity"]].copy()
-fc_enriched = enriched_model.predict(future_enriched)
+- Synthetic data: price sensitivities and event effects are assumptions, not market benchmarks.
+- Only two past Black Weeks, and the scenario multipliers come from a single backtest year.
+- Comparison with *true* demand is only possible because the data is synthetic. With real data, validation is limited to products that never sold out (the script reports both).
 
-# ---------------------------------------------------------------
-# 6. Compare accuracy: overall and campaign-days-only
-# ---------------------------------------------------------------
-def metrics(y_true, y_pred):
-    mae = mean_absolute_error(y_true, y_pred)
-    rmse = np.sqrt(mean_squared_error(y_true, y_pred))
-    mape = np.mean(np.abs((y_true - y_pred) / y_true)) * 100
-    return mae, rmse, mape
+## How to run
 
-y_true = test["y"].values
-camp_mask = test["is_campaign"].values.astype(bool)
+```bash
+pip install -r requirements.txt
+python generate_dataset.py   # creates output/data and output/hidden (fixed seed, reproducible)
+python demand_planning.py    # backtest, 2026 forecast, scenarios and charts in output/results
+python sanity_check.py       # optional: chart of observed sales vs. hidden true demand
+```
 
-mae_b, rmse_b, mape_b = metrics(y_true, fc_baseline["yhat"].values)
-mae_e, rmse_e, mape_e = metrics(y_true, fc_enriched["yhat"].values)
+## Repository structure
 
-mae_b_c, rmse_b_c, mape_b_c = metrics(y_true[camp_mask], fc_baseline["yhat"].values[camp_mask])
-mae_e_c, rmse_e_c, mape_e_c = metrics(y_true[camp_mask], fc_enriched["yhat"].values[camp_mask])
+```
+generate_dataset.py      synthetic data generator
+demand_planning.py       censoring fix, models, backtest, scenarios, charts
+sanity_check.py          censoring sanity chart
+output/data/             data the planner can use
+output/hidden/           ground truth, for evaluation only
+output/results/          backtest, forecasts, scenarios, charts
+```
 
-print("\n--- Overall holdout accuracy ---")
-print(f"Baseline : MAE={mae_b:.2f}  RMSE={rmse_b:.2f}  MAPE={mape_b:.2f}%")
-print(f"Enriched : MAE={mae_e:.2f}  RMSE={rmse_e:.2f}  MAPE={mape_e:.2f}%")
-print(f"Improvement (MAE): {(1 - mae_e/mae_b)*100:.1f}%")
+## Data dictionary
 
-print("\n--- Campaign-days-only accuracy ---")
-print(f"Baseline : MAE={mae_b_c:.2f}  RMSE={rmse_b_c:.2f}  MAPE={mape_b_c:.2f}%")
-print(f"Enriched : MAE={mae_e_c:.2f}  RMSE={rmse_e_c:.2f}  MAPE={mape_e_c:.2f}%")
-print(f"Improvement (MAE) on campaign days: {(1 - mae_e_c/mae_b_c)*100:.1f}%")
+**Setup:** 40 products in 4 categories (Small Appliances, Cookware, Tableware & Gifts, Home Textiles). Daily sales 1 Jan 2024 – 11 Oct 2026. Six suppliers: 3 EU (lead time 14–24 days) and 3 Asia (63–84 days). Black Friday 2026 is 27 Nov.
 
-# ---------------------------------------------------------------
-# 7. Save outputs for charting / diagram construction
-# ---------------------------------------------------------------
-out = test[["ds", "y", "is_campaign", "campaign_intensity"]].copy()
-out["yhat_baseline"] = fc_baseline["yhat"].values
-out["yhat_enriched"] = fc_enriched["yhat"].values
-out.to_csv("/home/claude/campaign_regressor_results.csv", index=False)
+### `output/data/`: what the planner can use
 
-summary = {
-    "mae_baseline_overall": mae_b, "mae_enriched_overall": mae_e,
-    "mae_baseline_campaign": mae_b_c, "mae_enriched_campaign": mae_e_c,
-    "improvement_overall_pct": (1 - mae_e/mae_b)*100,
-    "improvement_campaign_pct": (1 - mae_e_c/mae_b_c)*100,
-}
-pd.Series(summary).to_csv("/home/claude/campaign_regressor_summary.csv")
-print("\nSaved: campaign_regressor_results.csv, campaign_regressor_summary.csv")
+| File | Grain | Columns |
+|---|---|---|
+| `sales_daily.csv` | date × product | units_sold, list_price_eur, discount_pct, selling_price_eur, campaign_id, stock_end_of_day, stockout_flag, revenue_eur |
+| `products.csv` | product | product_name, category, supplier_id, list_price_eur, unit_cost_eur, moq_units, case_pack_units |
+| `suppliers.csv` | supplier | region, country, lead_time_mean_days, lead_time_sd_days |
+| `campaigns.csv` | campaign | campaign_name, campaign_type, start_date, end_date, status (completed / planned) |
+| `campaign_discounts.csv` | campaign × product | discount_pct, including planned Black Week 2026 discounts |
+| `inventory_snapshot.csv` | product | on_hand_units as of 12 Oct 2026 |
+| `open_purchase_orders.csv` | order | sku, supplier_id, order_date, qty_units, confirmed_eta |
+| `purchase_orders_history.csv` | order | received orders with actual_arrival and actual_lead_time_days |
+| `cost_params.csv` | product | unit cost, holding_cost_rate_annual, clearance_discount_pct, stockout_goodwill_penalty_pct |
+
+### `output/hidden/`: ground truth (never used for forecasting)
+
+| File | Use |
+|---|---|
+| `actuals_2026.csv` | True daily demand 12 Oct – 31 Dec 2026, for a later forecast-vs-actual review |
+| `true_demand_history.csv` | Unconstrained historical demand, to evaluate the stockout correction |
+| `ground_truth_params.csv` | Demand archetype, price elasticity and event strength per year |
+| `open_po_actual_arrivals.csv` | Actual arrival dates of open orders (some later than confirmed) |
+
+### `output/results/`
+
+| File | Content |
+|---|---|
+| `backtest_2025_black_week_by_sku.csv` | Black Week 2025 forecast per model vs. observed and true demand |
+| `backtest_2025_summary.csv` | Bias and WAPE per model |
+| `black_week_2026_scenarios.csv` | Low / expected / high per product, plus the comparison models |
+| `forecast_2026_daily.csv` | Daily forecast to 31 Dec 2026 |
+| `scenario_calibration.csv` | Scenario multipliers and interval coverage |
+v")
