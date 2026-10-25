@@ -1,0 +1,41 @@
+sku,product_name,category,supplier_id,family,predecessor_sku,launch_date,end_of_life_date,launch_price_eur,moq_units,case_pack_units,unit_cost_eur,q4_2026_allocation_units
+SKU001,Noise-Cancelling Headphones Gen 1,Audio,SUP02,HEADPHONES,,2023-09-04,2025-04-30,299,60,6,182.4,
+SKU002,Noise-Cancelling Headphones Gen 2,Audio,SUP02,HEADPHONES,SKU001,2025-04-07,2026-10-31,329,70,10,197.72,
+SKU003,Noise-Cancelling Headphones Gen 3,Audio,SUP02,HEADPHONES,SKU002,2026-09-21,,349,66,6,203.13,336
+SKU004,Wireless Earbuds Gen 1,Audio,SUP02,EARBUDS,,2023-10-02,2025-10-31,149,140,10,97.27,
+SKU005,Wireless Earbuds Gen 2,Audio,SUP02,EARBUDS,SKU004,2025-09-22,,169,90,10,121.01,520
+SKU006,Portable Bluetooth Speaker,Audio,SUP06,,,2023-05-01,,79,330,10,21.2,
+SKU007,Soundbar 3.1,Audio,SUP03,,,2024-03-04,,399,18,6,231.44,84
+SKU008,Smartwatch Gen 1,Wearables,SUP02,SMARTWATCH,,2023-09-11,2024-10-31,279,66,6,161.86,
+SKU009,Smartwatch Gen 2,Wearables,SUP02,SMARTWATCH,SKU008,2024-09-23,2025-10-31,299,52,4,216.72,
+SKU010,Smartwatch Gen 3,Wearables,SUP02,SMARTWATCH,SKU009,2025-09-22,,319,50,10,187.73,220
+SKU011,Fitness Band,Wearables,SUP02,,,2023-03-06,,59,48,4,35.28,200
+SKU012,"55"" 4K TV 2024 Model",TV & Smart Home,SUP03,TV55,,2024-04-08,2025-06-30,799,24,6,498.93,
+SKU013,"55"" 4K TV 2025 Model",TV & Smart Home,SUP03,TV55,SKU012,2025-04-07,2026-06-30,849,36,6,567.18,
+SKU014,"55"" 4K TV 2026 Model",TV & Smart Home,SUP03,TV55,SKU013,2026-04-06,,899,50,10,495.38,160
+SKU015,4K Streaming Stick,TV & Smart Home,SUP03,,,2022-10-03,,49,180,10,31.98,530
+SKU016,Smart Speaker Gen 1,TV & Smart Home,SUP03,SMARTSPEAKER,,2023-10-02,2025-10-31,59,84,6,39.22,
+SKU017,Smart Speaker Gen 2,TV & Smart Home,SUP03,SMARTSPEAKER,SKU016,2025-10-06,,69,90,10,48.2,270
+SKU018,Robot Vacuum Gen 1,TV & Smart Home,SUP03,ROBOVAC,,2024-03-04,2026-04-30,449,24,6,293.6,
+SKU019,Robot Vacuum Gen 2,TV & Smart Home,SUP03,ROBOVAC,SKU018,2026-03-16,,499,28,4,294.7,104
+SKU020,Video Doorbell,TV & Smart Home,SUP03,,,2023-04-03,,129,28,4,86.29,108
+SKU021,Indoor Security Camera,TV & Smart Home,SUP03,,,2023-04-03,,49,28,4,30.98,176
+SKU022,Smart Plug 2-Pack,TV & Smart Home,SUP06,,,2023-01-09,,29,420,10,10.29,
+SKU023,Wireless Game Controller,Gaming,SUP04,,,2022-11-07,,69,70,10,38.49,220
+SKU024,Gaming Headset Gen 1,Gaming,SUP04,GAMINGHEADSET,,2024-05-06,2026-08-31,99,40,4,70.52,
+SKU025,Gaming Headset Gen 2,Gaming,SUP04,GAMINGHEADSET,SKU024,2026-08-17,,119,54,6,66.66,138
+SKU026,Mechanical Keyboard,Gaming,SUP04,,,2023-06-05,,129,40,10,91.52,120
+SKU027,Gaming Mouse,Gaming,SUP04,,,2023-06-05,,69,24,4,47.07,132
+SKU028,E-Reader,Computing & Mobile,SUP02,,,2023-10-09,,139,60,6,80.94,168
+SKU029,Action Camera,Computing & Mobile,SUP03,,,2025-05-05,,249,20,4,169.68,96
+SKU030,USB-C Charger 65W,Computing & Mobile,SUP05,,,2023-02-06,,39,430,10,13.96,
+SKU031,USB-C Cable 2m,Computing & Mobile,SUP05,,,2023-02-06,,15,660,20,3.98,
+SKU032,"Power Bank 20,000 mAh",Computing & Mobile,SUP05,,,2023-02-06,,45,300,20,14.01,
+SKU033,Universal Phone Case,Computing & Mobile,SUP05,,,2023-02-06,,19,320,10,7.51,
+SKU034,Screen Protector 2-Pack,Computing & Mobile,SUP05,,,2023-02-06,,12,80,20,3.46,
+SKU035,HDMI 2.1 Cable,Computing & Mobile,SUP01,,,2023-01-09,,19,12,4,7.49,
+SKU036,Wireless Mouse,Computing & Mobile,SUP01,,,2023-01-09,,29,40,10,11.66,
+SKU037,Webcam 1080p,Computing & Mobile,SUP01,,,2023-01-09,,59,12,6,19.32,
+SKU038,Aluminium Laptop Stand,Computing & Mobile,SUP05,,,2023-02-06,,39,40,20,15.68,
+SKU039,microSD Card 256GB,Computing & Mobile,SUP01,,,2023-01-09,,29,60,6,7.93,
+SKU040,"Tablet Sleeve 11""",Computing & Mobile,SUP06,,,2023-05-01,,25,30,10,10.1,
