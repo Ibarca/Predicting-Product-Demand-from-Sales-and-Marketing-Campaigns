@@ -1,0 +1,164 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "b76cb79f-4c72-4d82-8047-14c8e6337bb4",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-10-25T20:29:54.565759Z",
+     "iopub.status.busy": "2026-10-25T20:29:54.565191Z",
+     "iopub.status.idle": "2026-10-25T20:29:54.569761Z",
+     "shell.execute_reply": "2026-10-25T20:29:54.568773Z",
+     "shell.execute_reply.started": "2026-10-25T20:29:54.565729Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "import pandas as pd"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "679f5a12-e117-4cc3-b60c-c3b54d51f29f",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-10-25T20:29:54.936530Z",
+     "iopub.status.busy": "2026-10-25T20:29:54.935746Z",
+     "iopub.status.idle": "2026-10-25T20:29:54.941326Z",
+     "shell.execute_reply": "2026-10-25T20:29:54.940235Z",
+     "shell.execute_reply.started": "2026-10-25T20:29:54.936486Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "#Data exploration"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "id": "6a57e081-1b42-442b-a027-ba5c07c31fc6",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-10-25T20:29:55.418505Z",
+     "iopub.status.busy": "2026-10-25T20:29:55.417962Z",
+     "iopub.status.idle": "2026-10-25T20:29:55.458950Z",
+     "shell.execute_reply": "2026-10-25T20:29:55.458387Z",
+     "shell.execute_reply.started": "2026-10-25T20:29:55.418470Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "(36775, 10)\n",
+      "2023-01-01 00:00:00 2026-10-11 00:00:00\n",
+      "        event  year start_date   end_date     status\n",
+      "0  Black Week  2023 2023-11-20 2023-11-27  completed\n",
+      "1  Black Week  2024 2024-11-25 2024-12-02  completed\n",
+      "2  Black Week  2025 2025-11-24 2025-12-01  completed\n",
+      "3  Black Week  2026 2026-11-23 2026-11-30    planned\n"
+     ]
+    }
+   ],
+   "source": [
+    "sales = pd.read_csv(\"../data/sales_daily.csv\", parse_dates=[\"date\"])\n",
+    "products = pd.read_csv(\"../data/products.csv\", parse_dates=[\"launch_date\",\"end_of_life_date\"])\n",
+    "calendar = pd.read_csv(\"../data/marketing_calendar\", parse_dates=[\"start_date\",\"end_date\"])\n",
+    "\n",
+    "print(sales.shape)\n",
+    "print(sales.date.min(), sales.date.max())\n",
+    "print(calendar)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "9e6219e9-8154-4d76-960b-8fb4fb014222",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-10-25T20:29:55.985265Z",
+     "iopub.status.busy": "2026-10-25T20:29:55.984892Z",
+     "iopub.status.idle": "2026-10-25T20:29:55.988807Z",
+     "shell.execute_reply": "2026-10-25T20:29:55.988016Z",
+     "shell.execute_reply.started": "2026-10-25T20:29:55.985235Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "#checking if the total campaign days are 8"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "id": "b55431f5-db6a-431d-afb6-c6319f485415",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-10-25T20:33:30.913664Z",
+     "iopub.status.busy": "2026-10-25T20:33:30.913028Z",
+     "iopub.status.idle": "2026-10-25T20:33:30.921556Z",
+     "shell.execute_reply": "2026-10-25T20:33:30.920866Z",
+     "shell.execute_reply.started": "2026-10-25T20:33:30.913626Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "        event  year start_date   end_date     status  days\n",
+      "0  Black Week  2023 2023-11-20 2023-11-27  completed     8\n",
+      "1  Black Week  2024 2024-11-25 2024-12-02  completed     8\n",
+      "2  Black Week  2025 2025-11-24 2025-12-01  completed     8\n",
+      "3  Black Week  2026 2026-11-23 2026-11-30    planned     8\n"
+     ]
+    }
+   ],
+   "source": [
+    "calendar['days'] = (calendar.end_date - calendar.start_date).dt.days +1\n",
+    "print(calendar)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "2b42a5a1-5613-4dc2-bba0-945cf9d81aed",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "e7c4f31e-0d00-473d-a2a4-df1789070105",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.9"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
