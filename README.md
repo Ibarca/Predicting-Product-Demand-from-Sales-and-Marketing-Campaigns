@@ -1,7 +1,7 @@
 # Black Week Demand Forecast for Consumer Electronics
 
 **Forecasting Black Week sales from historical data with Prophet.**
-Demand Forecasting · Part 2. Part 1: [link to Part 1]
+Demand Forecasting · Part 2. Part 1: [link to Part 1] 
 
 > **All data is synthetic.** The retailer, suppliers and products are fictional. Product names are generic, with no real brands or models.
 
