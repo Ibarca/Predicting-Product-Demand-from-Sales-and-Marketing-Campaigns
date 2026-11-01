@@ -1,0 +1,41 @@
+﻿sku_id,status,listed_date,category,supplier_id
+1,1,2015,Storage,SUP_D
+2,1,2015,Storage,SUP_C
+3,1,2015,Power Tools,SUP_B
+4,1,2015,Power Tools,SUP_D
+5,1,2016,Storage,SUP_B
+6,1,2016,Hand Tools,SUP_C
+7,1,2016,Storage,SUP_E
+8,1,2016,Hand Tools,SUP_A
+9,1,2016,Workshop Equipment,SUP_E
+10,1,2017,Workshop Equipment,SUP_B
+11,1,2017,Hand Tools,SUP_B
+12,1,2017,Storage,SUP_D
+13,1,2017,Power Tools,SUP_B
+14,1,2017,Power Tools,SUP_A
+15,1,2018,Storage,SUP_C
+16,1,2018,Hand Tools,SUP_B
+17,1,2019,Workshop Equipment,SUP_E
+18,1,2019,Power Tools,SUP_C
+19,1,2019,Power Tools,SUP_B
+20,1,2019,Workshop Equipment,SUP_E
+21,1,2020,Storage,SUP_E
+22,1,2020,Hand Tools,SUP_B
+23,1,2020,Workshop Equipment,SUP_D
+24,1,2020,Storage,SUP_A
+25,1,2021,Storage,SUP_C
+26,1,2020,Storage,SUP_C
+27,1,2020,Power Tools,SUP_B
+28,1,2020,Power Tools,SUP_A
+29,1,2020,Workshop Equipment,SUP_A
+30,1,2021,Hand Tools,SUP_D
+31,1,2021,Power Tools,SUP_D
+32,1,2021,Power Tools,SUP_D
+33,1,2022,Workshop Equipment,SUP_C
+34,1,2022,Power Tools,SUP_A
+35,1,2022,Power Tools,SUP_A
+36,1,2022,Workshop Equipment,SUP_B
+37,1,2022,Hand Tools,SUP_D
+38,1,2022,Storage,SUP_C
+39,1,2023,Power Tools,SUP_D
+40,1,2023,Storage,SUP_A
