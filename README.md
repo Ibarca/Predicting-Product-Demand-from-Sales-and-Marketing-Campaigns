@@ -80,6 +80,17 @@ Not necessarily. By including promotional events and discount percentages as reg
 
 ## 2. The Objective
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Ibarca/Predicting-Product-Demand-from-Sales-and-Marketing-Campaigns/d89c61faa656c4171a18c5aff73c1e7283deb403/Images/Image%2008.11.26%20at%2022.49.jpeg"
+       alt="Black Week historical sales and demand forecast (2023–2026) — illustrative example"
+       title="Black Week: Historical Sales and Forecast (Illustrative Example)"
+       width="850">
+</p>
+
+<p align="center">
+  <em>Figure 1. Illustrative example of historical Black Week sales (2023–2025) and a demand forecast for 2026. Values are synthetic and do not represent actual model results.</em>
+</p>
+
 For this exercise, I'll use synthetic data from a fictional consumer-electronics retailer to forecast product-level demand for **Black Week 2026 (23–30 November)**.
 
 The goal is to estimate expected demand using historical sales, promotional events and planned discounts, and explore how these forecasts could support inventory planning.
