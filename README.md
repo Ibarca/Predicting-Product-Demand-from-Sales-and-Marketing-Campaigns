@@ -1,13 +1,10 @@
 
 # Taking Sales Forecasting Further: Black Friday Demand Planning with Prophet
 
-In my previous project, [Building My First Sales Forecast in Python with Prophet](https://github.com/Ibarca/Building-My-First-Sales-Forecast-in-Python-with-Prophet/blob/7d96a4d40f1ad34093ce58e52e6a35fa6e6f112e/README.md), I explored how to forecast sales using historical data and Prophet.
+In my previous project, [Building My First Sales Forecast in Python with Prophet](https://github.com/Ibarca/Building-My-First-Sales-Forecast-in-Python-with-Prophet/blob/7d96a4d40f1ad34093ce58e52e6a35fa6e6f112e/README.md), I explored how to forecast sales using historical data and Prophet. The exercise helped me understand how Prophet identifies trends and seasonal patterns to predict future sales. However, I only used Prophet's built-in seasonalities, without considering external factors that could influence demand.
 
-The exercise helped me understand how Prophet identifies trends and seasonal patterns to predict future sales.
+With Black Friday approaching, I thought it would be a good opportunity to take the next step and explore **how to incorporate additional variables into Prophet**, applying them to a practical demand-planning exercise.
 
-However, I only used Prophet's built-in seasonalities, without considering external factors that could influence demand.
-
-With Black Friday approaching, I thought it would be a good opportunity to take the next step and explore **promotional events and regressors**, applying them to a practical demand-planning exercise.
 
 ## 1. What Am I Adding This Time?
 
