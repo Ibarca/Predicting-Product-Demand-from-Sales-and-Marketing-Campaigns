@@ -17,12 +17,14 @@ While these exercises helped to understand both forecasting and model evaluation
 
 ## 1. What Am I Adding This Time?
 
-In e-commerce, demand is not only influenced by historical trends and seasonality. Promotional activities and discounts can also have a significant impact.
+In e-commerce, demand is not only influenced by historical trends and seasonality. Promotional activities, discounts and other commercial factors can also be associated with changes in purchasing behaviour.
 
-This time, I'll introduce two additional elements:
+This time, I'll introduce two additional elements into Prophet:
 
-- **Promotional events:** Flagging Black Week and other promotional periods so Prophet can learn their impact on demand, especially since Black Friday falls on different dates each year.
-- **Discount percentage:** Adding the discount offered on each product as an external regressor to account for changes in promotional intensity.
+- **Promotional events:** Identifying Black Week and other promotional periods so the model can estimate demand patterns associated with these events, particularly since Black Friday falls on different dates each year.
+- **Discount percentage:** Including the discount applied to each product as an external regressor, allowing the model to consider historical relationships between discount levels and sales.
+
+The objective is to explore whether this additional information can make the forecasts more useful for demand planning.
 
 
 <p align="center">
@@ -34,23 +36,25 @@ This time, I'll introduce two additional elements:
 
 ### What Are Regressors?
 
-Regressors are additional variables that help explain changes in the value we want to forecast.
+Regressors are additional variables that can help a forecasting model capture relationships that aren't explained by historical trends and seasonality alone. In e-commerce, these variables could include:
 
-For example, imagine a product that sold 100 units during Black Week last year with a 10% discount. This year, the retailer plans to offer a 30% discount.
+- **Promotional events:** Black Friday, Cyber Monday or other campaigns, represented as event indicators.
+- **Discount percentage:** Discounts applied to individual products.
+- **Marketing spend:** Advertising budgets allocated to products or campaigns.
+- **Product price:** Changes in selling prices.
+- **Website traffic:** Visits or product page views.
+- **Competitor prices:** Changes in competing offers.
+- **Weather conditions:** Temperature or rainfall, particularly for weather-sensitive products.
 
-Should we expect the same demand? Probably not. But how much additional demand could the higher discount generate?
+In Prophet, promotional events can be represented using its holiday functionality or binary regressors, while numerical variables such as discount percentage can be included through `add_regressor()`.
 
-By including discount percentage as a regressor, Prophet can use this information alongside historical sales patterns.
+For example, imagine a product that sold 100 units during Black Week last year with a 10% discount. This year, the retailer plans to offer a 30% discount. Would we expect the same demand? Probably not, but estimating how much demand might change is more complicated than simply comparing the two discounts.
 
-Of course, adding more variables doesn't necessarily improve forecast accuracy. That's something I'll also evaluate.
-
+By including discount percentage as a regressor, Prophet can learn from the historical relationship between discounts and sales. However, this doesn't mean that higher discounts necessarily caused higher sales. Other factors, such as the promotional event itself, may also explain part of the increase.
 
 > [!IMPORTANT]
-> **More regressors don't always mean better forecasts.**
->
-> Adding relevant variables can improve accuracy by helping Prophet explain changes in demand. However, too many regressors can lead to **overfitting**: the model starts learning noise rather than meaningful patterns.
->
-> This can make forecasts less reliable on new data, especially when historical observations are limited. That's why I'll evaluate whether the additional variables actually improve accuracy before using them for Black Week 2026.
+> **More regressors don't always mean better forecasts.** Irrelevant or highly correlated variables can introduce noise, make model effects harder to interpret and increase the risk of overfitting. Future regressor values must also be known or estimated when generating forecasts. That's why I'll use historical backtesting to evaluate whether the additional information actually improves accuracy.
+
 
 
 
