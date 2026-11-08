@@ -13,10 +13,11 @@ With Black Friday approaching, I thought it would be a good opportunity to take 
 
 
 <p align="center">
-  <img src="https://github.com/Ibarca/Predicting-Product-Demand-from-Sales-and-Marketing-Campaigns/blob/bddf56d92f9a2fa3d48e49df9402d607894a587c/Images/Image%2008.11.26%20at%2017.01.jpeg"
-       alt="Adding regressors to Prophet for demand forecasting"
+  <img src="https://raw.githubusercontent.com/Ibarca/Predicting-Product-Demand-from-Sales-and-Marketing-Campaigns/cdd54471b803b965e2f9e94b4feee944d6729975/Images/black_week_optimized.jpg"
+       alt="Black Week"
        width="850">
 </p>
+
 
 
 ## 1. What Am I Adding This Time?
@@ -27,6 +28,14 @@ This time, I'll introduce two additional elements:
 
 - **Promotional events:** Flagging Black Week and other promotional periods so Prophet can learn their impact on demand, especially since Black Friday falls on different dates each year.
 - **Discount percentage:** Adding the discount offered on each product as an external regressor to account for changes in promotional intensity.
+
+
+<p align="center">
+  <img src="https://github.com/Ibarca/Predicting-Product-Demand-from-Sales-and-Marketing-Campaigns/blob/bddf56d92f9a2fa3d48e49df9402d607894a587c/Images/Image%2008.11.26%20at%2017.01.jpeg"
+       alt="Adding regressors to Prophet for demand forecasting"
+       width="850">
+</p>
+
 
 ### What Are Regressors?
 
