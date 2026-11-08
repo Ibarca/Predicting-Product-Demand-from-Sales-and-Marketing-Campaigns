@@ -108,19 +108,21 @@ The focus of this project is on **incorporating promotional information into Pro
 
 For those interested in the fundamentals, I've covered them in my previous projects: [Building My First Sales Forecast in Python with Prophet](https://github.com/Ibarca/Building-My-First-Sales-Forecast-in-Python-with-Prophet/blob/7d96a4d40f1ad34093ce58e52e6a35fa6e6f112e/README.md), where I explored trends and seasonality, and [Forecast Validation with Prophet: Backtesting Using One Train-Test Split](https://github.com/Ibarca/Forecast-Validation-with-Prophet-Backtesting-Using-One-Train-Test-Split/blob/main/README.md), where I focused on evaluating forecast accuracy.
 
-## 5. The Dataset
+## 5. Understanding the Data
 
-For this exercise, I'm using synthetic data from a fictional consumer-electronics retailer, covering daily sales from January 2023 to October 2026, together with product information and a marketing calendar. The original catalogue contains 40 products, but not all of them are suitable for forecasting Black Week 2026. Some were launched recently, while others have been discontinued or replaced by newer generations.
+The dataset is organized into three CSV files, each serving a different purpose in the forecasting process.
 
-To keep the analysis focused, I've selected **21 established products** that have sales history covering Black Week 2023, 2024 and 2025 and remain active for Black Week 2026. This gives me a consistent group of products with historical promotional periods to learn from.
+| Dataset | Key Columns | Purpose |
+|---|---|---|
+| `sales_daily.csv` | `date`, `sku`, `units_sold`, `discount_pct`, `stockout_flag` | Historical sales and promotional pricing at product level |
+| `products.csv` | `sku`, product information, lifecycle dates | Identifying products with sufficient historical data |
+| `marketing_calendar.csv` | Event dates, event status, promotional indicators | Identifying historical and planned promotional periods |
 
-The data is organized into three files:
+The main dataset is `sales_daily.csv`, which contains the daily sales observations used to train Prophet. I'll combine it with the marketing calendar to identify promotional periods and use the product catalogue to select the SKUs included in the analysis.
 
-| Dataset | Information |
-|---|---|
-| `sales_daily.csv` | Daily product sales, discount percentages and stockout indicators |
-| `products.csv` | Product catalogue, launch dates and lifecycle information |
-| `marketing_calendar.csv` | Historical promotional events and planned campaigns |
+Two variables are particularly important for this project: `discount_pct`, which captures the discount offered on a given day, and the promotional-event indicator derived from the marketing calendar. These will be introduced as external regressors to explore whether they improve forecast accuracy.
+
+The `stockout_flag` will also play an important role, helping me identify sales observations that may not reflect actual customer demand.
 
 > [!NOTE]
 > **A limitation of synthetic data**
