@@ -27,6 +27,17 @@ By including discount percentage as a regressor, Prophet can use this informatio
 
 Of course, adding more variables doesn't necessarily improve forecast accuracy. That's something I'll also evaluate.
 
+
+> [!IMPORTANT]
+> **More regressors don't always mean better forecasts.**
+>
+> Adding relevant variables can improve accuracy by helping Prophet explain changes in demand. However, too many regressors can lead to **overfitting**: the model starts learning noise rather than meaningful patterns.
+>
+> This can make forecasts less reliable on new data, especially when historical observations are limited. That's why I'll evaluate whether the additional variables actually improve accuracy before using them for Black Week 2026.
+
+
+
+
 ## 2. The Objective
 
 For this exercise, I'll use synthetic data from a fictional consumer-electronics retailer to forecast product-level demand for **Black Week 2026 (23–30 November)**.
