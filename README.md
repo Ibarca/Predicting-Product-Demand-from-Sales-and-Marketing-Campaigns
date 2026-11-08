@@ -103,10 +103,10 @@ I'll then use the available historical data and planned promotional conditions t
   <em>Figure 1. Conceptual illustration of Black Week sales history and the 2026 forecast. Values are illustrative, not actual model results.</em>
 </p>
 
+
 The focus of this project is on **incorporating promotional information into Prophet and evaluating its predictive value**, rather than revisiting forecasting fundamentals or extending the analysis into inventory planning.
 
-*All data used in this project is synthetic.*
-
+For those interested in the fundamentals, I've covered them in my previous projects: [Building My First Sales Forecast in Python with Prophet](https://github.com/Ibarca/Building-My-First-Sales-Forecast-in-Python-with-Prophet/blob/7d96a4d40f1ad34093ce58e52e6a35fa6e6f112e/README.md), where I explored trends and seasonality, and [Forecast Validation with Prophet: Backtesting Using One Train-Test Split](https://github.com/Ibarca/Forecast-Validation-with-Prophet-Backtesting-Using-One-Train-Test-Split/blob/main/README.md), where I focused on evaluating forecast accuracy.
 
 ## 3. The Dataset
 
