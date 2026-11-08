@@ -92,21 +92,27 @@ Rather than revisiting forecasting fundamentals or evaluation methods, which I c
 
 *All data used in this project is synthetic. The retailer and products are fictional.*
 
+
 ## 3. The Dataset
 
-For this exercise, I'm using synthetic data from a fictional consumer-electronics retailer, covering daily sales between January 2023 and October 2026, together with product information and a marketing calendar.
+For this exercise, I'm using synthetic data from a fictional consumer-electronics retailer, covering daily sales from January 2023 to October 2026, together with product information and a marketing calendar.
 
-The original catalogue contains 40 products, but not all of them are suitable for this exercise. Some were launched recently, while others have been discontinued or replaced by newer generations.
+The original catalogue contains 40 products, but not all of them are suitable for forecasting Black Week 2026. Some were launched recently, while others have been discontinued or replaced by newer generations.
 
-To keep the analysis focused, I've selected **21 established products** with sales history across Black Week 2023, 2024 and 2025 that remain active for Black Week 2026.
+To keep the analysis focused, I've selected **21 established products** that have sales history covering Black Week 2023, 2024 and 2025 and remain active for Black Week 2026. This gives me a consistent group of products with historical promotional periods to learn from.
 
-The dataset includes three main files:
+The data is organized into three files:
 
 | Dataset | Information |
 |---|---|
-| `sales_daily.csv` | Daily sales, discounts and stockout information |
-| `products.csv` | Product catalogue and lifecycle dates |
-| `marketing_calendar.csv` | Historical and planned promotional events |
+| `sales_daily.csv` | Daily product sales, discount percentages and stockout indicators |
+| `products.csv` | Product catalogue, launch dates and lifecycle information |
+| `marketing_calendar.csv` | Historical promotional events and planned campaigns |
+
+> [!NOTE]
+> **A limitation of synthetic data**
+>
+> The dataset is designed to simulate an e-commerce environment, but the relationships between sales, discounts and promotional events depend on the assumptions used to generate it. Any improvements in forecasting accuracy should therefore be interpreted as results of this simulated exercise rather than evidence that the same approach would perform equally well with real retail data.
 
 ### Handling Stockouts
 
