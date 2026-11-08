@@ -110,33 +110,29 @@ For those interested in the fundamentals, I've covered them in my previous proje
 
 ## 5. Understanding the Data
 
-The dataset is organized into three CSV files, each serving a different purpose in the forecasting process.
+For this project, I'm working with three CSV files that provide the historical sales, product information and promotional calendar needed to build the forecast.
 
 | Dataset | Key Columns | Purpose |
 |---|---|---|
-| `sales_daily.csv` | `date`, `sku`, `units_sold`, `discount_pct`, `stockout_flag` | Historical sales and promotional pricing at product level |
+| `sales_daily.csv` | `date`, `sku`, `units_sold`, `discount_pct`, `stockout_flag` | Daily product sales, discount information and stock availability |
 | `products.csv` | `sku`, product information, lifecycle dates | Identifying products with sufficient historical data |
-| `marketing_calendar.csv` | Event dates, event status, promotional indicators | Identifying historical and planned promotional periods |
+| `marketing_calendar.csv` | Event dates, event status, promotional indicators | Historical and planned promotional periods |
 
-The main dataset is `sales_daily.csv`, which contains the daily sales observations used to train Prophet. I'll combine it with the marketing calendar to identify promotional periods and use the product catalogue to select the SKUs included in the analysis.
-
-Two variables are particularly important for this project: `discount_pct`, which captures the discount offered on a given day, and the promotional-event indicator derived from the marketing calendar. These will be introduced as external regressors to explore whether they improve forecast accuracy.
-
-The `stockout_flag` will also play an important role, helping me identify sales observations that may not reflect actual customer demand.
+The forecasting process starts with `sales_daily.csv`, which I'll combine with the marketing calendar to incorporate promotional information. In particular, I'll use **discount percentages and promotional-event indicators as external regressors** to explore whether they improve forecast accuracy.
 
 > [!NOTE]
 > **A limitation of synthetic data**
 >
-> The dataset is designed to simulate an e-commerce environment, but the relationships between sales, discounts and promotional events depend on the assumptions used to generate it. Any improvements in forecasting accuracy should therefore be interpreted as results of this simulated exercise rather than evidence that the same approach would perform equally well with real retail data.
+> Because the data is simulated, the relationships between sales, discounts and promotional events depend on the assumptions used to generate it. Any improvements in forecasting accuracy should therefore be interpreted within the context of this exercise rather than as evidence of how the model would perform with real retail data.
 
 ### Handling Stockouts
 
+One important consideration when forecasting demand is that **recorded sales don't always reflect actual customer demand**. If a product runs out of stock, sales may drop even though customers are still interested in purchasing it. Without accounting for this, the model could interpret the lower sales as a decline in demand.
 
-One important thing I've learned when working with demand forecasting is that **sales don't always reflect actual demand**. For example, if a product runs out of stock, recorded sales will drop even though customers might still be interested in buying it. If I use these observations without accounting for stock availability, the model could interpret the lower sales as a drop in demand and underestimate future sales.
+Fortunately, the dataset includes a `stockout_flag` that allows me to identify these situations. I'll exclude stockout-affected observations from model training and accuracy evaluation, while keeping the original data for historical reporting.
 
-Fortunately, my dataset includes a `stockout_flag` that identifies days when products were out of stock. I'll use this information to exclude affected observations from model training and accuracy evaluation, while keeping the original sales data for historical reporting.
+This approach won't recover the demand lost during stockouts, but it should help prevent the model from learning misleading patterns caused by limited product availability.
 
-Of course, this approach doesn't recover the demand that was lost during stockouts, but it helps prevent the model from learning misleading patterns caused by limited product availability.
 
 ## 4. Preparing the Promotional Variables
 
