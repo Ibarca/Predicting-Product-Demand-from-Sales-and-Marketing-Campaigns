@@ -1,10 +1,69 @@
-# Black Week Demand Planning
+# Black Week Demand Planning: Improving Sales Forecasts with Regressors in Prophet
 
-A practical demand-planning case study exploring how historical sales, promotional events and planned discounts can help estimate product-level demand for Black Week.
+In my previous project, [Building My First Sales Forecast in Python with Prophet](https://github.com/Ibarca/Building-My-First-Sales-Forecast-in-Python-with-Prophet/blob/7d96a4d40f1ad34093ce58e52e6a35fa6e6f112e/README.md), I explored how to forecast sales using historical data and Prophet.
 
-**Business question:** How many units of each product should an online consumer-electronics retailer expect to sell during Black Week 2026 (23–30 November)?
+The exercise helped me understand how Prophet works, particularly how it identifies trends and seasonal patterns to predict future sales.
 
-> All data in this project is synthetic. The retailer and products are fictional.
+However, I only used the seasonality already built into Prophet. I didn't include any external variables that could help explain changes in demand.
+
+For this project, I want to take the next step and explore **regressors**.
+
+
+## What Are Regressors?
+
+Regressors are additional variables that we introduce into a forecasting model to help explain changes in demand.
+
+For example, historical sales can tell us that a product tends to sell more during certain periods of the year. But sales are not only influenced by seasonality.
+
+Other factors can also play a role:
+
+- **Discounts:** A higher discount might encourage more purchases.
+- **Marketing campaigns:** Advertising can bring more traffic and increase sales.
+- **Weather:** Some products sell more depending on the temperature or weather conditions.
+- **Special events:** Promotional periods and holidays can temporarily increase demand.
+
+By adding these variables, we give the model more information that could help explain demand fluctuations.
+
+Of course, adding regressors doesn't automatically mean getting better forecasts. That's exactly what I want to test.
+
+
+## Why Black Friday?
+
+Black Friday is a good opportunity to explore this concept because demand during this period is heavily influenced by promotional activities.
+
+Imagine a product that sold 100 units during Black Week last year with a 10% discount. This year, the retailer plans to offer a 30% discount.
+
+Would we expect the product to sell the same number of units? Probably not. But how much additional demand should we expect?
+
+A model based only on historical sales and seasonality might not fully capture the impact of that change in discount.
+
+This is where regressors become interesting.
+
+By including the discount percentage in Prophet, I want to see whether the model can better account for these differences when forecasting Black Week demand.
+
+## What I Want to Achieve
+
+For this exercise, I'll use synthetic sales data from a fictional consumer-electronics retailer to forecast product-level demand for **Black Week 2026 (23–30 November)**.
+
+To keep things simple, I'll focus on just one regressor: **discount percentage**.
+
+I'll compare two models:
+
+1. **Prophet without regressors:** Using historical sales, seasonality and Black Week event effects.
+2. **Prophet with a discount regressor:** Using the same setup, but adding discount percentage as an additional variable.
+
+I'll then backtest both models against Black Week 2025 sales to see whether including discounts improves forecast accuracy.
+
+The main question I want to answer is:
+
+**Does adding discount information actually improve the forecast, and if so, by how much?**
+
+I won't go into the basics of Prophet again, as I already covered those in my [previous project](https://github.com/Ibarca/Building-My-First-Sales-Forecast-in-Python-with-Prophet/blob/7d96a4d40f1ad34093ce58e52e6a35fa6e6f112e/README.md).
+
+Instead, I'll focus on how to introduce a regressor, compare the results and see what this means from a demand-planning perspective.
+
+
+
 
 ## 1. The Challenge
 
