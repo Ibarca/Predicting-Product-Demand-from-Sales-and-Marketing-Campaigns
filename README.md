@@ -78,30 +78,34 @@ Not necessarily. By including promotional events and discount percentages as reg
 
 
 
-## 2. The Objective
+## 4. Project Objective
+
+For this exercise, I'll use synthetic sales data from a fictional consumer-electronics retailer to forecast product-level demand for **Black Week 2026 (23–30 November)**.
+
+Building on my previous Prophet projects, I want to explore whether incorporating **promotional events and planned discounts** can improve forecast accuracy compared with relying on historical sales patterns alone.
+
+To evaluate this, I'll backtest three approaches against Black Week 2025:
+
+- **Baseline Prophet:** Historical sales, trend and seasonality.
+- **Prophet + Promotional Events:** Adding a binary indicator for promotional periods.
+- **Prophet + Promotional Events + Discounts:** Incorporating discount percentages as an additional regressor.
+
+I'll then use the available historical data and planned promotional conditions to generate the final Black Week 2026 demand forecast.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Ibarca/Predicting-Product-Demand-from-Sales-and-Marketing-Campaigns/d89c61faa656c4171a18c5aff73c1e7283deb403/Images/Image%2008.11.26%20at%2022.49.jpeg"
-       alt="Black Week historical sales and demand forecast (2023–2026) — illustrative example"
-       title="Black Week: Historical Sales and Forecast (Illustrative Example)"
+       alt="Illustrative Black Week historical sales and demand forecast (2023–2026)"
+       title="Black Week: Historical Sales and Forecast"
        width="850">
 </p>
 
 <p align="center">
-  <em>Figure 1. Illustrative example of historical Black Week sales (2023–2025) and a demand forecast for 2026. Values are synthetic and do not represent actual model results.</em>
+  <em>Figure 1. Conceptual illustration of Black Week sales history and the 2026 forecast. Values are illustrative, not actual model results.</em>
 </p>
 
-For this exercise, I'll use synthetic data from a fictional consumer-electronics retailer to forecast product-level demand for **Black Week 2026 (23–30 November)**.
+The focus of this project is on **incorporating promotional information into Prophet and evaluating its predictive value**, rather than revisiting forecasting fundamentals or extending the analysis into inventory planning.
 
-The goal is to estimate expected demand using historical sales, promotional events and planned discounts, and explore how these forecasts could support inventory planning.
-
-Before generating the 2026 forecast, I also want to answer one question: **Does incorporating promotional information improve forecast accuracy compared with using historical sales patterns alone?**
-
-To explore this, I'll backtest the approach against Black Week 2025, comparing a basic Prophet model with versions that include promotional events and discount information. This will help me understand whether the additional variables provide useful predictive information, although one historical backtest won't be enough to establish that the same results will hold in future years.
-
-Rather than revisiting forecasting fundamentals or evaluation methods, which I covered in my previous projects, I'll focus on introducing these additional variables, evaluating their contribution and translating the final forecast into practical demand-planning insights.
-
-*All data used in this project is synthetic. The retailer and products are fictional.*
+*All data used in this project is synthetic.*
 
 
 ## 3. The Dataset
