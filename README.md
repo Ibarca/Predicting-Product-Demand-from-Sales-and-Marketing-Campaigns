@@ -50,14 +50,9 @@ Depending on the information they represent, regressors can take different forms
 | **Categorical** | Represents distinct categories without a natural order | Campaign type, marketing channel |
 | **Ordinal** | Represents categories with a meaningful order | Promotion intensity: low, medium, high |
 
-> [!NOTE]
-> **How does Prophet handle these variables?**
->
-> External regressors are added using `add_regressor()`. Prophet requires numerical inputs, so categorical variables must first be converted into an appropriate numerical representation, such as binary indicator columns.
+In Prophet, external regressors are added using `add_regressor()`. Since Prophet requires numerical inputs, categorical variables must first be appropriately encoded, for example using binary indicator columns.
 
-#### Which Regressors Am I Using?
-
-For this project, I'll focus on two external regressors:
+For this project, I'll use two external regressors:
 
 | Regressor | Type | Values |
 |---|---|---|
@@ -72,42 +67,21 @@ Imagine a product that sold **100 units during Black Week last year with a 10% d
 
 Should we expect the same demand?
 
-Not necessarily. Historical sales patterns alone might not fully capture how demand varies under different promotional conditions.
-
-By incorporating discount percentage as a regressor, Prophet can estimate the historical relationship between discount levels and sales, provided the training data contains enough relevant variation to learn from.
+Not necessarily. Historical sales patterns alone might not fully capture how demand varies under different promotional conditions. By incorporating discount percentage as a regressor, Prophet can estimate the historical relationship between discount levels and sales, provided the training data contains enough relevant variation to learn from.
 
 > [!IMPORTANT]
 > **Prediction is not the same as causation.**
 >
-> Prophet might predict higher sales under a 30% discount than under a 10% discount. However, this doesn't prove that increasing the discount would cause the predicted increase in sales.
->
-> Other factors, such as promotional events, marketing activities or seasonality, may also explain the historical relationship.
+> Prophet might predict higher sales under a 30% discount than under a 10% discount. However, this doesn't prove that increasing the discount would cause the predicted increase in sales. Other factors, such as promotional events, marketing activities or seasonality, may also explain the historical relationship.
 
 #### Important Considerations
 
-> [!TIP]
-> **Future regressor values must be available.**
->
-> Prophet requires regressor values for both historical observations and the forecast period.
->
-> - **Usually known in advance:** Planned discounts, promotional calendars, marketing budgets.
-> - **Potentially unknown:** Future website traffic, competitor prices or weather conditions.
->
-> Unknown future values would need to be estimated separately before they could be used in the forecast.
+There are two important points to keep in mind when using regressors in Prophet:
 
-> [!WARNING]
-> **More regressors don't necessarily mean better forecasts.**
->
-> Irrelevant variables can introduce noise and increase the risk of overfitting, while highly correlated regressors can make their individual effects difficult to interpret.
->
-> That's why I'll evaluate whether incorporating promotional events and discount information actually improves forecast accuracy through historical backtesting.
+- **Future values must be available:** Prophet requires regressor values for both historical observations and the forecast period. Planned discounts and promotional calendars are usually known in advance, while future website traffic or competitor prices may need to be estimated separately.
+- **More regressors don't necessarily improve accuracy:** Irrelevant variables can introduce noise and increase the risk of overfitting, while highly correlated regressors can make their individual effects difficult to interpret.
 
-> [!NOTE]
-> **What am I trying to achieve?**
->
-> The objective of this exercise is to forecast demand under planned promotional conditions, **not to measure the causal impact of discounts or identify the optimal discount strategy**.
->
-> I'll use the additional variables to explore whether they improve predictions and make the resulting forecasts more useful for inventory planning.
+For this exercise, I'll evaluate whether incorporating promotional events and discount information improves forecast accuracy through historical backtesting. My objective is to **forecast demand under planned promotional conditions**, rather than measure the causal impact of discounts or identify an optimal discount strategy.
 
 ### What Prophet Can and Cannot Tell Us
 
