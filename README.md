@@ -43,16 +43,20 @@ Of course, adding more variables doesn't necessarily improve forecast accuracy. 
 
 For this exercise, I'll use synthetic data from a fictional consumer-electronics retailer to forecast product-level demand for **Black Week 2026 (23–30 November)**.
 
-Building on my previous project, I want to explore how incorporating promotional events and planned discounts into Prophet can help estimate demand more accurately, and how these forecasts could support inventory planning.
+This project builds on two previous exercises:
 
-But before forecasting 2026, I want to answer one question: **Does adding promotional information actually improve forecast accuracy, and if so, by how much?**
+1. [Building My First Sales Forecast in Python with Prophet](https://github.com/Ibarca/Building-My-First-Sales-Forecast-in-Python-with-Prophet/blob/7d96a4d40f1ad34093ce58e52e6a35fa6e6f112e/README.md), where I explored the fundamentals of forecasting with Prophet.
+2. [Forecast Validation with Prophet: Backtesting Using One Train-Test Split](https://github.com/Ibarca/Forecast-Validation-with-Prophet-Backtesting-Using-One-Train-Test-Split/blob/main/README.md), where I learned how to evaluate forecast accuracy using historical data.
+
+This time, I want to go a step further by incorporating **promotional events and planned discounts** into Prophet and exploring how the resulting forecasts could support inventory planning.
+
+Before forecasting 2026, I also want to answer one question: **Does adding promotional information actually improve forecast accuracy, and if so, by how much?**
 
 To find out, I'll backtest the approach against Black Week 2025, comparing a basic Prophet model with versions that include promotional events and discount information.
 
-I won't revisit the fundamentals of Prophet, as I already covered those in my [previous project](https://github.com/Ibarca/Building-My-First-Sales-Forecast-in-Python-with-Prophet/blob/7d96a4d40f1ad34093ce58e52e6a35fa6e6f112e/README.md). Instead, I'll focus on introducing these additional variables, evaluating their impact and translating the final forecast into practical demand-planning insights.
+Rather than revisiting forecasting fundamentals or evaluation methods, I'll focus on introducing these additional variables, understanding their impact and translating the final forecast into practical demand-planning insights.
 
 *All data used in this project is synthetic. The retailer and products are fictional.*
-
 
 
 
