@@ -108,11 +108,9 @@ The focus of this project is on **incorporating promotional information into Pro
 
 For those interested in the fundamentals, I've covered them in my previous projects: [Building My First Sales Forecast in Python with Prophet](https://github.com/Ibarca/Building-My-First-Sales-Forecast-in-Python-with-Prophet/blob/7d96a4d40f1ad34093ce58e52e6a35fa6e6f112e/README.md), where I explored trends and seasonality, and [Forecast Validation with Prophet: Backtesting Using One Train-Test Split](https://github.com/Ibarca/Forecast-Validation-with-Prophet-Backtesting-Using-One-Train-Test-Split/blob/main/README.md), where I focused on evaluating forecast accuracy.
 
-## 3. The Dataset
+## 5. The Dataset
 
-For this exercise, I'm using synthetic data from a fictional consumer-electronics retailer, covering daily sales from January 2023 to October 2026, together with product information and a marketing calendar.
-
-The original catalogue contains 40 products, but not all of them are suitable for forecasting Black Week 2026. Some were launched recently, while others have been discontinued or replaced by newer generations.
+For this exercise, I'm using synthetic data from a fictional consumer-electronics retailer, covering daily sales from January 2023 to October 2026, together with product information and a marketing calendar. The original catalogue contains 40 products, but not all of them are suitable for forecasting Black Week 2026. Some were launched recently, while others have been discontinued or replaced by newer generations.
 
 To keep the analysis focused, I've selected **21 established products** that have sales history covering Black Week 2023, 2024 and 2025 and remain active for Black Week 2026. This gives me a consistent group of products with historical promotional periods to learn from.
 
@@ -131,13 +129,12 @@ The data is organized into three files:
 
 ### Handling Stockouts
 
-One important consideration when forecasting demand is that **observed sales don't always represent actual demand**.
 
-If a product runs out of stock, sales may fall even though customers still want to purchase it. Training a model on these observations without accounting for stock availability could lead to underestimating demand.
+One important thing I've learned when working with demand forecasting is that **sales don't always reflect actual demand**. For example, if a product runs out of stock, recorded sales will drop even though customers might still be interested in buying it. If I use these observations without accounting for stock availability, the model could interpret the lower sales as a drop in demand and underestimate future sales.
 
-Fortunately, the dataset includes a `stockout_flag` identifying affected observations. I'll exclude these days from model training rather than treating them as normal demand observations.
+Fortunately, my dataset includes a `stockout_flag` that identifies days when products were out of stock. I'll use this information to exclude affected observations from model training and accuracy evaluation, while keeping the original sales data for historical reporting.
 
-This doesn't recover the demand that was lost during stockouts, but it avoids teaching the model that constrained sales necessarily reflect lower customer interest. I'll keep the original observations for historical reporting and exclude stockout-affected days from the main accuracy calculation.
+Of course, this approach doesn't recover the demand that was lost during stockouts, but it helps prevent the model from learning misleading patterns caused by limited product availability.
 
 ## 4. Preparing the Promotional Variables
 
