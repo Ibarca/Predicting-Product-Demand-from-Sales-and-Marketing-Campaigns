@@ -33,47 +33,81 @@ The objective is to explore whether this additional information can make the for
        width="850">
 </p>
 
+
 ### What Are Regressors?
 
 Regressors are additional variables that help a forecasting model capture relationships that may not be fully explained by historical trends and seasonality. In e-commerce, demand can be influenced by promotional activities, pricing decisions, marketing campaigns and external factors.
+
+#### Different Types of Regressors
 
 Depending on the information they represent, regressors can take different forms:
 
 | Type | Description | E-commerce examples |
 |---|---|---|
-| **Binary** | Indicates whether a condition is present (1) or absent (0) | Black Friday, promotional events, active campaigns |
+| **Binary** | Indicates whether a condition is present (1) or absent (0) | Black Friday, promotional events |
 | **Continuous numerical** | Represents a measurable quantity | Discount percentage, product price, marketing spend, temperature |
 | **Discrete numerical** | Represents countable quantities | Number of active campaigns, advertising impressions |
 | **Categorical** | Represents distinct categories without a natural order | Campaign type, marketing channel |
 | **Ordinal** | Represents categories with a meaningful order | Promotion intensity: low, medium, high |
 
-In Prophet, external regressors are incorporated using `add_regressor()`. Since Prophet requires numerical inputs, categorical variables must first be appropriately encoded, for example using binary indicator columns.
+> [!NOTE]
+> **How does Prophet handle these variables?**
+>
+> External regressors are added using `add_regressor()`. Prophet requires numerical inputs, so categorical variables must first be converted into an appropriate numerical representation, such as binary indicator columns.
 
-For this project, I'll use two regressors:
+#### Which Regressors Am I Using?
 
-- **Promotional events:** A binary variable indicating whether a promotional event is taking place (0 or 1).
-- **Discount percentage:** A continuous numerical variable representing the discount applied to each product.
+For this project, I'll focus on two external regressors:
+
+| Regressor | Type | Values |
+|---|---|---|
+| **Promotional event** | Binary | `0` = No event, `1` = Event |
+| **Discount percentage** | Continuous numerical | `0–100%` |
 
 Both variables will be included alongside Prophet's trend and seasonality components.
 
 #### How Can Regressors Help Forecast Demand?
 
-Imagine a product that sold 100 units during Black Week last year with a 10% discount. This year, the retailer plans to offer a 30% discount. Should we expect the same demand?
+Imagine a product that sold **100 units during Black Week last year with a 10% discount**. This year, the retailer plans to offer a **30% discount**.
+
+Should we expect the same demand?
 
 Not necessarily. Historical sales patterns alone might not fully capture how demand varies under different promotional conditions.
 
 By incorporating discount percentage as a regressor, Prophet can estimate the historical relationship between discount levels and sales, provided the training data contains enough relevant variation to learn from.
 
-However, **a predictive relationship is not necessarily a causal relationship**. Higher discounts may coincide with higher demand because retailers tend to offer larger discounts during major promotional events. Prophet cannot automatically distinguish these effects or determine how many additional units a higher discount would cause customers to purchase.
+> [!IMPORTANT]
+> **Prediction is not the same as causation.**
+>
+> Prophet might predict higher sales under a 30% discount than under a 10% discount. However, this doesn't prove that increasing the discount would cause the predicted increase in sales.
+>
+> Other factors, such as promotional events, marketing activities or seasonality, may also explain the historical relationship.
 
 #### Important Considerations
 
-There are two important points to keep in mind when using regressors in Prophet:
+> [!TIP]
+> **Future regressor values must be available.**
+>
+> Prophet requires regressor values for both historical observations and the forecast period.
+>
+> - **Usually known in advance:** Planned discounts, promotional calendars, marketing budgets.
+> - **Potentially unknown:** Future website traffic, competitor prices or weather conditions.
+>
+> Unknown future values would need to be estimated separately before they could be used in the forecast.
 
-- **Future values must be available:** Prophet requires regressor values for both historical observations and the forecast period. Planned discounts and promotional calendars are usually available in advance, while future website traffic or competitor prices may need to be estimated separately.
-- **More regressors don't necessarily improve accuracy:** Irrelevant variables can introduce noise and increase the risk of overfitting, while highly correlated regressors can make their individual effects difficult to interpret.
+> [!WARNING]
+> **More regressors don't necessarily mean better forecasts.**
+>
+> Irrelevant variables can introduce noise and increase the risk of overfitting, while highly correlated regressors can make their individual effects difficult to interpret.
+>
+> That's why I'll evaluate whether incorporating promotional events and discount information actually improves forecast accuracy through historical backtesting.
 
-For this exercise, I'll evaluate whether incorporating promotional events and discount information improves forecast accuracy through historical backtesting, rather than assuming that adding more variables automatically produces better predictions.
+> [!NOTE]
+> **What am I trying to achieve?**
+>
+> The objective of this exercise is to forecast demand under planned promotional conditions, **not to measure the causal impact of discounts or identify the optimal discount strategy**.
+>
+> I'll use the additional variables to explore whether they improve predictions and make the resulting forecasts more useful for inventory planning.
 
 ### What Prophet Can and Cannot Tell Us
 
