@@ -1,60 +1,47 @@
-# Black Week Demand Planning: Improving Sales Forecasts with Regressors in Prophet
+
+# Taking Sales Forecasting Further: Black Friday Demand Planning with Prophet
 
 In my previous project, [Building My First Sales Forecast in Python with Prophet](https://github.com/Ibarca/Building-My-First-Sales-Forecast-in-Python-with-Prophet/blob/7d96a4d40f1ad34093ce58e52e6a35fa6e6f112e/README.md), I explored how to forecast sales using historical data and Prophet.
 
-The exercise helped me understand how Prophet works, particularly how it identifies trends and seasonal patterns to predict future sales.
+The exercise helped me understand how Prophet identifies trends and seasonal patterns to predict future sales.
 
-However, I only used the seasonality already built into Prophet. I didn't include any external variables that could help explain changes in demand.
+However, I only used Prophet's built-in seasonalities, without considering external factors that could influence demand.
 
-For this project, I want to take the next step and explore **regressors**.
+With Black Friday approaching, I thought it would be a good opportunity to take the next step and explore **promotional events and regressors**, applying them to a practical demand-planning exercise.
 
+## 1. What Am I Adding This Time?
 
-## What Are Regressors?
+In e-commerce, demand is not only influenced by historical trends and seasonality. Promotional activities and discounts can also have a significant impact.
 
-Regressors are additional variables that we introduce into a forecasting model to help explain changes in demand.
+This time, I'll introduce two additional elements:
 
-For example, historical sales can tell us that a product tends to sell more during certain periods of the year. But sales are not only influenced by seasonality.
+- **Promotional events:** Flagging Black Week and other promotional periods so Prophet can learn their impact on demand, especially since Black Friday falls on different dates each year.
+- **Discount percentage:** Adding the discount offered on each product as an external regressor to account for changes in promotional intensity.
 
-Other factors can also play a role:
+### What Are Regressors?
 
-- **Discounts:** A higher discount might encourage more purchases.
-- **Marketing campaigns:** Advertising can bring more traffic and increase sales.
-- **Weather:** Some products sell more depending on the temperature or weather conditions.
-- **Special events:** Promotional periods and holidays can temporarily increase demand.
+Regressors are additional variables that help explain changes in the value we want to forecast.
 
-By adding these variables, we give the model more information that could help explain demand fluctuations.
+For example, imagine a product that sold 100 units during Black Week last year with a 10% discount. This year, the retailer plans to offer a 30% discount.
 
-Of course, adding regressors doesn't automatically mean getting better forecasts. That's exactly what I want to test.
+Should we expect the same demand? Probably not. But how much additional demand could the higher discount generate?
 
+By including discount percentage as a regressor, Prophet can use this information alongside historical sales patterns.
 
-## Why Black Friday?
+Of course, adding more variables doesn't necessarily improve forecast accuracy. That's something I'll also evaluate.
 
-Black Friday is a good opportunity to explore this concept because demand during this period is heavily influenced by promotional activities.
+## 2. The Objective
 
-Imagine a product that sold 100 units during Black Week last year with a 10% discount. This year, the retailer plans to offer a 30% discount.
+For this exercise, I'll use synthetic data from a fictional consumer-electronics retailer to forecast product-level demand for **Black Week 2026 (23–30 November)**.
 
-Would we expect the product to sell the same number of units? Probably not. But how much additional demand should we expect?
+The goal is to estimate expected demand using historical sales, promotional events and planned discounts, and explore how these forecasts could support inventory planning.
 
-A model based only on historical sales and seasonality might not fully capture the impact of that change in discount.
+I'll also backtest the approach against Black Week 2025 to understand whether incorporating promotional information improves forecast accuracy.
 
-This is where regressors become interesting.
+Rather than revisiting Prophet's fundamentals, which I covered in my previous project, I'll focus on applying these new concepts to a practical e-commerce demand-planning problem.
 
-By including the discount percentage in Prophet, I want to see whether the model can better account for these differences when forecasting Black Week demand.
+*All data used in this project is synthetic. The retailer and products are fictional.*
 
-## What I Want to Achieve
-
-For this exercise, I'll use synthetic sales data from a fictional consumer-electronics retailer to forecast product-level demand for **Black Week 2026 (23–30 November)**.
-
-To keep things simple, I'll focus on just one regressor: **discount percentage**.
-
-I'll compare two models:
-
-1. **Prophet without regressors:** Using historical sales, seasonality and Black Week event effects.
-2. **Prophet with a discount regressor:** Using the same setup, but adding discount percentage as an additional variable.
-
-I'll then backtest both models against Black Week 2025 sales to see whether including discounts improves forecast accuracy.
-
-The main question I want to answer is:
 
 **Does adding discount information actually improve the forecast, and if so, by how much?**
 
