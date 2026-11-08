@@ -56,6 +56,15 @@ For this project, I'll focus on two regressors:
 Both variables will be included alongside Prophet's trend and seasonality components using `add_regressor()`.
 
 
+> [!NOTE]
+> **More regressors don't necessarily mean better forecasts.**
+>
+> Adding too many variables can introduce noise and increase the risk of **overfitting**, where the model learns patterns specific to historical data that don't generalize well to future demand. Highly correlated regressors can also make it difficult to interpret their individual effects.
+>
+> For this reason, I'll focus on two relevant regressors and use historical backtesting to evaluate whether they actually improve forecast accuracy.
+
+
+
 ## 3. What Can Regressors Actually Tell Us?
 
 Imagine a product that sold **100 units during Black Week with a 10% discount**. If the retailer plans to offer a **30% discount** this year, should we expect the same demand?
