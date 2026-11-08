@@ -71,10 +71,14 @@ Imagine a product that sold **100 units during Black Week with a 10% discount**.
 
 Not necessarily. By including discounts as a regressor, Prophet can consider how sales have historically varied with different discount levels, provided there's enough relevant data to learn from.
 
+
 > [!IMPORTANT]
-> **Prediction is not the same as causation.**
+> **Forecasting demand is different from measuring promotional impact.**
 >
-> Prophet can forecast demand under different discount assumptions, but it cannot prove that changing the discount would cause the predicted difference in sales. Other factors, such as promotional events or marketing activities, may also influence demand.
+> By incorporating both promotional events and discount percentages, Prophet can account for their historical relationships with sales when forecasting future demand. However, this doesn't necessarily mean it can isolate how much additional demand a specific discount would cause.
+>
+> For this project, my objective is to **improve demand forecasting using promotional information**, rather than measure the causal impact of individual promotions.
+
 
 There are also two practical limitations: **future regressor values must be known or estimated**, and **adding more variables doesn't necessarily improve forecast accuracy**.
 
