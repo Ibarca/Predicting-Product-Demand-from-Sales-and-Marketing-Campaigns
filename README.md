@@ -33,48 +33,47 @@ The objective is to explore whether this additional information can make the for
        width="850">
 </p>
 
-
 ### What Are Regressors?
 
-Regressors are additional variables that can help a forecasting model capture relationships that aren't explained by historical trends and seasonality alone. In e-commerce, these variables could include:
+Regressors are additional variables that help a forecasting model capture relationships that may not be fully explained by historical trends and seasonality. In e-commerce, demand can be influenced by promotional activities, pricing decisions, marketing campaigns and external factors.
 
-- **Promotional events:** Black Friday, Cyber Monday or other campaigns, represented as event indicators.
-- **Discount percentage:** Discounts applied to individual products.
-- **Marketing spend:** Advertising budgets allocated to products or campaigns.
-- **Product price:** Changes in selling prices.
-- **Website traffic:** Visits or product page views.
-- **Competitor prices:** Changes in competing offers.
-- **Weather conditions:** Temperature or rainfall, particularly for weather-sensitive products.
+Depending on the information they represent, regressors can take different forms:
 
-In Prophet, both promotional events and discount percentages can be included as external regressors using `add_regressor()`. Promotional events are represented as binary variables (0 or 1), while discount percentages are numerical variables. This allows the model to incorporate both types of information alongside historical trends and seasonality.
-
-For example, imagine a product that sold 100 units during Black Week last year with a 10% discount. This year, the retailer plans to offer a 30% discount. Would we expect the same demand? Probably not, but estimating how much demand might change is more complicated than simply comparing the two discounts.
-
-By including discount percentage as a regressor, Prophet can learn from the historical relationship between discounts and sales. However, this doesn't mean that higher discounts necessarily caused higher sales. Other factors, such as the promotional event itself, may also explain part of the increase.
-
-> [!IMPORTANT]
-> **More regressors don't always mean better forecasts.** Irrelevant or highly correlated variables can introduce noise, make model effects harder to interpret and increase the risk of overfitting. Future regressor values must also be known or estimated when generating forecasts. That's why I'll use historical backtesting to evaluate whether the additional information actually improves accuracy.
-
-#### Different Types of Regressors
-
-Regressors can be classified in several ways depending on the information they represent.
-
-| Type | Description | E-commerce example |
+| Type | Description | E-commerce examples |
 |---|---|---|
-| **Binary** | Takes two values, typically 0 or 1 | Whether Black Week is active |
-| **Continuous numerical** | Represents a measurable quantity | Discount percentage, product price |
-| **Discrete numerical** | Represents countable quantities | Number of active campaigns |
-| **Categorical** | Represents different categories | Campaign type: Black Friday, Christmas, Summer Sale |
+| **Binary** | Indicates whether a condition is present (1) or absent (0) | Black Friday, promotional events, active campaigns |
+| **Continuous numerical** | Represents a measurable quantity | Discount percentage, product price, marketing spend, temperature |
+| **Discrete numerical** | Represents countable quantities | Number of active campaigns, advertising impressions |
+| **Categorical** | Represents distinct categories without a natural order | Campaign type, marketing channel |
 | **Ordinal** | Represents categories with a meaningful order | Promotion intensity: low, medium, high |
 
-In Prophet, external regressors are added using `add_regressor()`. Since Prophet expects numerical values, categorical variables must first be converted into numerical representations, such as binary indicator columns.
+In Prophet, external regressors are incorporated using `add_regressor()`. Since Prophet requires numerical inputs, categorical variables must first be appropriately encoded, for example using binary indicator columns.
 
-Beyond their data type, there are two other distinctions worth considering when building a forecasting model:
+For this project, I'll use two regressors:
 
-- **Known vs. unknown future values:** Prophet requires the future values of external regressors to generate forecasts. Planned discounts and promotional calendars are usually known in advance, while variables such as website traffic or competitor prices may need to be forecast separately.
-- **Predictive vs. causal relationships:** A regressor can help predict demand without necessarily causing the observed changes. For example, higher discounts may be associated with higher sales because they often coincide with major promotional events.
+- **Promotional events:** A binary variable indicating whether a promotional event is taking place (0 or 1).
+- **Discount percentage:** A continuous numerical variable representing the discount applied to each product.
 
+Both variables will be included alongside Prophet's trend and seasonality components.
 
+#### How Can Regressors Help Forecast Demand?
+
+Imagine a product that sold 100 units during Black Week last year with a 10% discount. This year, the retailer plans to offer a 30% discount. Should we expect the same demand?
+
+Not necessarily. Historical sales patterns alone might not fully capture how demand varies under different promotional conditions.
+
+By incorporating discount percentage as a regressor, Prophet can estimate the historical relationship between discount levels and sales, provided the training data contains enough relevant variation to learn from.
+
+However, **a predictive relationship is not necessarily a causal relationship**. Higher discounts may coincide with higher demand because retailers tend to offer larger discounts during major promotional events. Prophet cannot automatically distinguish these effects or determine how many additional units a higher discount would cause customers to purchase.
+
+#### Important Considerations
+
+There are two important points to keep in mind when using regressors in Prophet:
+
+- **Future values must be available:** Prophet requires regressor values for both historical observations and the forecast period. Planned discounts and promotional calendars are usually available in advance, while future website traffic or competitor prices may need to be estimated separately.
+- **More regressors don't necessarily improve accuracy:** Irrelevant variables can introduce noise and increase the risk of overfitting, while highly correlated regressors can make their individual effects difficult to interpret.
+
+For this exercise, I'll evaluate whether incorporating promotional events and discount information improves forecast accuracy through historical backtesting, rather than assuming that adding more variables automatically produces better predictions.
 
 ### What Prophet Can and Cannot Tell Us
 
