@@ -12,6 +12,12 @@ However, both exercises relied on Prophet's built-in seasonalities, without inco
 With Black Friday approaching, I thought it would be a good opportunity to take the next step and explore **how to incorporate promotional events and discount information into Prophet**, applying what I've learned to a practical demand-planning exercise.
 
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Ibarca/Predicting-Product-Demand-from-Sales-and-Marketing-Campaigns/0715db47686d5a44abf3542859811228e2a16ff8/Images/prophet_regressors_light.jpg"
+       alt="Adding regressors to Prophet for demand forecasting"
+       width="850">
+</p>
+
 
 ## 1. What Am I Adding This Time?
 
