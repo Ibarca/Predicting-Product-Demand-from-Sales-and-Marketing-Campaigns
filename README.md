@@ -55,27 +55,21 @@ For this project, I'll focus on two regressors:
 
 Both variables will be included alongside Prophet's trend and seasonality components using `add_regressor()`.
 
+
 ## 3. What Can Regressors Actually Tell Us?
 
-To understand why regressors could be useful, imagine a product that sold **100 units during Black Week last year with a 10% discount**. This year, the retailer plans to offer a **30% discount**. Should we expect the same demand?
+Imagine a product that sold **100 units during Black Week with a 10% discount**. If the retailer plans to offer a **30% discount** this year, should we expect the same demand?
 
-Not necessarily. If we only look at historical sales patterns, we might miss some of the factors associated with changes in demand during promotional periods. By introducing discount percentage as a regressor, Prophet can also consider how sales have historically varied across different discount levels.
-
-Of course, this only works if the historical data contains enough relevant information for the model to learn from. It also doesn't mean that increasing the discount will necessarily generate more sales.
+Not necessarily. By including discounts as a regressor, Prophet can consider how sales have historically varied with different discount levels, provided there's enough relevant data to learn from.
 
 > [!IMPORTANT]
 > **Prediction is not the same as causation.**
 >
-> Prophet might predict higher sales under a 30% discount than under a 10% discount. However, this doesn't prove that increasing the discount would cause the predicted increase in sales. Other factors, such as promotional events, marketing activities or seasonality, may also explain the historical relationship.
+> Prophet can forecast demand under different discount assumptions, but it cannot prove that changing the discount would cause the predicted difference in sales. Other factors, such as promotional events or marketing activities, may also influence demand.
 
-### Important Considerations
+There are also two practical limitations: **future regressor values must be known or estimated**, and **adding more variables doesn't necessarily improve forecast accuracy**.
 
-There are two important points to keep in mind when using regressors in Prophet:
-
-- **Future values must be available:** Prophet requires regressor values for both historical observations and the forecast period. Planned discounts and promotional calendars are usually known in advance, while future website traffic or competitor prices may need to be estimated separately.
-- **More regressors don't necessarily improve accuracy:** Irrelevant variables can introduce noise and increase the risk of overfitting, while highly correlated regressors can make their individual effects difficult to interpret.
-
-For this exercise, I'll evaluate whether incorporating promotional events and discount information improves forecast accuracy through historical backtesting. My objective is to **forecast demand under planned promotional conditions**, rather than measure the causal impact of discounts or identify an optimal discount strategy.
+For this project, I'll use historical backtesting to evaluate whether promotional events and discounts improve predictions, focusing on **demand planning rather than discount optimization**.
 
 ## 2. The Objective
 
