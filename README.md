@@ -1,9 +1,16 @@
 
 # Taking Sales Forecasting Further: Black Friday Demand Planning with Prophet
 
-In my previous project, [Building My First Sales Forecast in Python with Prophet](https://github.com/Ibarca/Building-My-First-Sales-Forecast-in-Python-with-Prophet/blob/7d96a4d40f1ad34093ce58e52e6a35fa6e6f112e/README.md), I explored how to forecast sales using historical data and Prophet. The exercise helped me understand how Prophet identifies trends and seasonal patterns to predict future sales. However, I only used Prophet's built-in seasonalities, without considering external factors that could influence demand.
+In my previous projects, I explored how to build and evaluate sales forecasts using Python and Prophet.
 
-With Black Friday approaching, I thought it would be a good opportunity to take the next step and explore **how to incorporate additional variables into Prophet**, applying them to a practical demand-planning exercise.
+I started with [Building My First Sales Forecast in Python with Prophet](https://github.com/Ibarca/Building-My-First-Sales-Forecast-in-Python-with-Prophet/blob/7d96a4d40f1ad34093ce58e52e6a35fa6e6f112e/README.md), where I learned how Prophet identifies trends and seasonal patterns to predict future sales.
+
+I then moved on to [Forecast Validation with Prophet: Backtesting Using One Train-Test Split](https://github.com/Ibarca/Forecast-Validation-with-Prophet-Backtesting-Using-One-Train-Test-Split/blob/main/README.md), where I explored how to evaluate forecast accuracy using historical data.
+
+However, both exercises relied on Prophet's built-in seasonalities, without incorporating additional variables that could help explain changes in demand.
+
+With Black Friday approaching, I thought it would be a good opportunity to take the next step and explore **how to incorporate promotional events and discount information into Prophet**, applying what I've learned to a practical demand-planning exercise.
+
 
 
 ## 1. What Am I Adding This Time?
