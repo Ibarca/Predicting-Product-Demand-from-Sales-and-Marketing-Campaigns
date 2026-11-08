@@ -55,6 +55,25 @@ By including discount percentage as a regressor, Prophet can learn from the hist
 > [!IMPORTANT]
 > **More regressors don't always mean better forecasts.** Irrelevant or highly correlated variables can introduce noise, make model effects harder to interpret and increase the risk of overfitting. Future regressor values must also be known or estimated when generating forecasts. That's why I'll use historical backtesting to evaluate whether the additional information actually improves accuracy.
 
+#### Different Types of Regressors
+
+Regressors can be classified in several ways depending on the information they represent.
+
+| Type | Description | E-commerce example |
+|---|---|---|
+| **Binary** | Takes two values, typically 0 or 1 | Whether Black Week is active |
+| **Continuous numerical** | Represents a measurable quantity | Discount percentage, product price |
+| **Discrete numerical** | Represents countable quantities | Number of active campaigns |
+| **Categorical** | Represents different categories | Campaign type: Black Friday, Christmas, Summer Sale |
+| **Ordinal** | Represents categories with a meaningful order | Promotion intensity: low, medium, high |
+
+In Prophet, external regressors are added using `add_regressor()`. Since Prophet expects numerical values, categorical variables must first be converted into numerical representations, such as binary indicator columns.
+
+Beyond their data type, there are two other distinctions worth considering when building a forecasting model:
+
+- **Known vs. unknown future values:** Prophet requires the future values of external regressors to generate forecasts. Planned discounts and promotional calendars are usually known in advance, while variables such as website traffic or competitor prices may need to be forecast separately.
+- **Predictive vs. causal relationships:** A regressor can help predict demand without necessarily causing the observed changes. For example, higher discounts may be associated with higher sales because they often coincide with major promotional events.
+
 
 
 ### What Prophet Can and Cannot Tell Us
