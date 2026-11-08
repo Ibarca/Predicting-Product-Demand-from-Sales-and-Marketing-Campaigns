@@ -64,25 +64,19 @@ Both variables will be included alongside Prophet's trend and seasonality compon
 > For this reason, I'll focus on two relevant regressors and use historical backtesting to evaluate whether they actually improve forecast accuracy.
 
 
-
 ## 3. What Can Regressors Actually Tell Us?
 
 Imagine a product that sold **100 units during Black Week with a 10% discount**. If the retailer plans to offer a **30% discount** this year, should we expect the same demand?
 
-Not necessarily. By including discounts as a regressor, Prophet can consider how sales have historically varied with different discount levels, provided there's enough relevant data to learn from.
-
+Not necessarily. By including promotional events and discount percentages as regressors, Prophet can consider how sales have historically varied under different promotional conditions, provided there's enough relevant data to learn from.
 
 > [!IMPORTANT]
 > **Forecasting demand is different from measuring promotional impact.**
 >
-> By incorporating both promotional events and discount percentages, Prophet can account for their historical relationships with sales when forecasting future demand. However, this doesn't necessarily mean it can isolate how much additional demand a specific discount would cause.
->
-> For this project, my objective is to **improve demand forecasting using promotional information**, rather than measure the causal impact of individual promotions.
+> Prophet can use promotional information to forecast expected demand, but it cannot necessarily determine how much additional demand a specific discount would cause. For this project, I'll focus on **predicting demand under planned promotional conditions**, rather than measuring the causal impact of discounts.
 
 
-There are also two practical limitations: **future regressor values must be known or estimated**, and **adding more variables doesn't necessarily improve forecast accuracy**.
 
-For this project, I'll use historical backtesting to evaluate whether promotional events and discounts improve predictions, focusing on **demand planning rather than discount optimization**.
 
 ## 2. The Objective
 
