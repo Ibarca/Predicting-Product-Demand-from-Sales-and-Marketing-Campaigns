@@ -1,4 +1,4 @@
-
+ 
 # Taking Sales Forecasting Further: Black Friday Demand Planning with Prophet
 
 In my previous projects, I explored how to build and evaluate sales forecasts using Python and Prophet.
@@ -13,7 +13,7 @@ With Black Friday approaching, I thought it would be a good opportunity to take 
 
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Ibarca/Predicting-Product-Demand-from-Sales-and-Marketing-Campaigns/0715db47686d5a44abf3542859811228e2a16ff8/Images/prophet_regressors_light.jpg"
+  <img src="https://github.com/Ibarca/Predicting-Product-Demand-from-Sales-and-Marketing-Campaigns/blob/bddf56d92f9a2fa3d48e49df9402d607894a587c/Images/Image%2008.11.26%20at%2017.01.jpeg"
        alt="Adding regressors to Prophet for demand forecasting"
        width="850">
 </p>
