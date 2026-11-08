@@ -50,24 +50,24 @@ Depending on the information they represent, regressors can take different forms
 | **Categorical** | Represents distinct categories without a natural order | Campaign type, marketing channel |
 | **Ordinal** | Represents categories with a meaningful order | Promotion intensity: low, medium, high |
 
-In Prophet, external regressors are added using `add_regressor()`. Since Prophet requires numerical inputs, categorical variables must first be appropriately encoded, for example using binary indicator columns.
 
-For this project, I'll use two external regressors:
+In Prophet, external regressors are added using `add_regressor()`. Since Prophet works with numerical inputs, categorical variables first need to be converted into numerical values, for example using binary indicators.
 
-| Regressor | Type | Values |
-|---|---|---|
-| **Promotional event** | Binary | `0` = No event, `1` = Event |
-| **Discount percentage** | Continuous numerical | `0–100%` |
+For this project, I'll focus on two regressors:
 
-Both variables will be included alongside Prophet's trend and seasonality components.
+- **Promotional events:** A binary variable that takes the value `1` when a promotional event is taking place and `0` otherwise.
+- **Discount percentage:** A numerical variable representing the discount applied to each product, ranging from `0%` to `100%`.
+
+Both variables will be included alongside Prophet's trend and seasonality components, allowing me to explore whether this additional information helps improve demand forecasts.
 
 #### How Can Regressors Help Forecast Demand?
 
-Imagine a product that sold **100 units during Black Week last year with a 10% discount**. This year, the retailer plans to offer a **30% discount**.
+To illustrate why this could be useful, imagine a product that sold **100 units during Black Week last year with a 10% discount**. This year, the retailer is planning to offer a **30% discount**. Should we expect the same demand?
 
-Should we expect the same demand?
+Not necessarily. If we only look at historical sales patterns, we might miss some of the factors associated with changes in demand during promotional periods. By introducing discount percentage as a regressor, Prophet can also consider how sales have historically varied across different discount levels.
 
-Not necessarily. Historical sales patterns alone might not fully capture how demand varies under different promotional conditions. By incorporating discount percentage as a regressor, Prophet can estimate the historical relationship between discount levels and sales, provided the training data contains enough relevant variation to learn from.
+Of course, this only works if the historical data contains enough relevant information for the model to learn from. It also doesn't mean that increasing the discount will necessarily generate more sales, but it gives the model another piece of information to consider when forecasting demand.
+
 
 > [!IMPORTANT]
 > **Prediction is not the same as causation.**
