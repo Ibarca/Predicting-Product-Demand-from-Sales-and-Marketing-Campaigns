@@ -15,17 +15,12 @@ While these exercises helped to understand both forecasting and model evaluation
 
 
 
+
 ## 1. What Am I Adding This Time?
 
 In e-commerce, demand is not only influenced by historical trends and seasonality. Promotional activities, discounts and other commercial factors can also be associated with changes in purchasing behaviour.
 
-This time, I'll introduce two additional elements into Prophet:
-
-- **Promotional events:** Identifying Black Week and other promotional periods so the model can estimate demand patterns associated with these events, particularly since Black Friday falls on different dates each year.
-- **Discount percentage:** Including the discount applied to each product as an external regressor, allowing the model to consider historical relationships between discount levels and sales.
-
-The objective is to explore whether this additional information can make the forecasts more useful for demand planning.
-
+In my previous projects, I relied on Prophet's historical trend and seasonality components. This time, I want to take the next step by incorporating additional information into the model, specifically **promotional events and discount percentages**, and exploring whether this helps improve demand forecasts.
 
 <p align="center">
   <img src="https://github.com/Ibarca/Predicting-Product-Demand-from-Sales-and-Marketing-Campaigns/blob/bddf56d92f9a2fa3d48e49df9402d607894a587c/Images/Image%2008.11.26%20at%2017.01.jpeg"
@@ -33,12 +28,11 @@ The objective is to explore whether this additional information can make the for
        width="850">
 </p>
 
+## 2. Understanding Regressors in Prophet
 
-### What Are Regressors?
+Regressors are additional variables that help a forecasting model capture relationships that may not be fully explained by historical trends and seasonality. In e-commerce, these could include pricing decisions, marketing campaigns, website traffic or external factors such as weather.
 
-Regressors are additional variables that help a forecasting model capture relationships that may not be fully explained by historical trends and seasonality. In e-commerce, demand can be influenced by promotional activities, pricing decisions, marketing campaigns and external factors.
-
-#### Different Types of Regressors
+### Different Types of Regressors
 
 Depending on the information they represent, regressors can take different forms:
 
@@ -50,31 +44,31 @@ Depending on the information they represent, regressors can take different forms
 | **Categorical** | Represents distinct categories without a natural order | Campaign type, marketing channel |
 | **Ordinal** | Represents categories with a meaningful order | Promotion intensity: low, medium, high |
 
-
 In Prophet, external regressors are added using `add_regressor()`. Since Prophet works with numerical inputs, categorical variables first need to be converted into numerical values, for example using binary indicators.
+
+### Which Regressors Am I Using?
 
 For this project, I'll focus on two regressors:
 
-- **Promotional events:** A binary variable that takes the value `1` when a promotional event is taking place and `0` otherwise.
-- **Discount percentage:** A numerical variable representing the discount applied to each product, ranging from `0%` to `100%`.
+- **Promotional events:** A binary variable that takes the value `1` when a promotional event is taking place and `0` otherwise. This allows the model to capture demand patterns associated with events such as Black Friday, whose dates change every year.
+- **Discount percentage:** A numerical variable representing the discount applied to each product, ranging from `0%` to `100%`. This allows Prophet to consider historical relationships between discount levels and sales.
 
-Both variables will be included alongside Prophet's trend and seasonality components, allowing me to explore whether this additional information helps improve demand forecasts.
+Both variables will be included alongside Prophet's trend and seasonality components using `add_regressor()`.
 
-#### How Can Regressors Help Forecast Demand?
+## 3. What Can Regressors Actually Tell Us?
 
-To illustrate why this could be useful, imagine a product that sold **100 units during Black Week last year with a 10% discount**. This year, the retailer is planning to offer a **30% discount**. Should we expect the same demand?
+To understand why regressors could be useful, imagine a product that sold **100 units during Black Week last year with a 10% discount**. This year, the retailer plans to offer a **30% discount**. Should we expect the same demand?
 
 Not necessarily. If we only look at historical sales patterns, we might miss some of the factors associated with changes in demand during promotional periods. By introducing discount percentage as a regressor, Prophet can also consider how sales have historically varied across different discount levels.
 
-Of course, this only works if the historical data contains enough relevant information for the model to learn from. It also doesn't mean that increasing the discount will necessarily generate more sales, but it gives the model another piece of information to consider when forecasting demand.
-
+Of course, this only works if the historical data contains enough relevant information for the model to learn from. It also doesn't mean that increasing the discount will necessarily generate more sales.
 
 > [!IMPORTANT]
 > **Prediction is not the same as causation.**
 >
 > Prophet might predict higher sales under a 30% discount than under a 10% discount. However, this doesn't prove that increasing the discount would cause the predicted increase in sales. Other factors, such as promotional events, marketing activities or seasonality, may also explain the historical relationship.
 
-#### Important Considerations
+### Important Considerations
 
 There are two important points to keep in mind when using regressors in Prophet:
 
@@ -82,7 +76,6 @@ There are two important points to keep in mind when using regressors in Prophet:
 - **More regressors don't necessarily improve accuracy:** Irrelevant variables can introduce noise and increase the risk of overfitting, while highly correlated regressors can make their individual effects difficult to interpret.
 
 For this exercise, I'll evaluate whether incorporating promotional events and discount information improves forecast accuracy through historical backtesting. My objective is to **forecast demand under planned promotional conditions**, rather than measure the causal impact of discounts or identify an optimal discount strategy.
-
 
 ## 2. The Objective
 
