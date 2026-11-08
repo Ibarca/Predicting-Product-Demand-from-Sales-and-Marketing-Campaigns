@@ -46,7 +46,7 @@ Regressors are additional variables that can help a forecasting model capture re
 - **Competitor prices:** Changes in competing offers.
 - **Weather conditions:** Temperature or rainfall, particularly for weather-sensitive products.
 
-In Prophet, promotional events can be represented using its holiday functionality or binary regressors, while numerical variables such as discount percentage can be included through `add_regressor()`.
+In Prophet, both promotional events and discount percentages can be included as external regressors using `add_regressor()`. Promotional events are represented as binary variables (0 or 1), while discount percentages are numerical variables. This allows the model to incorporate both types of information alongside historical trends and seasonality.
 
 For example, imagine a product that sold 100 units during Black Week last year with a 10% discount. This year, the retailer plans to offer a 30% discount. Would we expect the same demand? Probably not, but estimating how much demand might change is more complicated than simply comparing the two discounts.
 
@@ -56,6 +56,28 @@ By including discount percentage as a regressor, Prophet can learn from the hist
 > **More regressors don't always mean better forecasts.** Irrelevant or highly correlated variables can introduce noise, make model effects harder to interpret and increase the risk of overfitting. Future regressor values must also be known or estimated when generating forecasts. That's why I'll use historical backtesting to evaluate whether the additional information actually improves accuracy.
 
 
+
+### What Prophet Can and Cannot Tell Us
+
+Before moving forward, I think it's important to understand what Prophet can actually tell us when we introduce promotional events and discount percentages as regressors.
+
+| Question | Can Prophet do it? | Explanation |
+|---|---|---|
+| Forecast product demand for Black Week 2026? | ✅ Yes | Uses historical sales patterns and the planned values of the regressors to estimate future sales. |
+| Account for promotional events? | ✅ Yes | A binary regressor allows Prophet to learn historical sales patterns associated with promotional periods. |
+| Incorporate different discount percentages? | ✅ Yes | A numerical regressor allows Prophet to capture historical relationships between discounts and sales. |
+| Estimate demand under a planned 30% discount? | ✅ Yes, with caution | Prophet can generate a conditional forecast using that discount, provided the model has learned a useful relationship from historical data. |
+| Determine whether regressors improve forecast accuracy? | ✅ With backtesting | Comparing models on historical holdout periods helps evaluate whether the additional variables improve predictions. |
+| Calculate how many extra units a 30% discount will cause compared with 10%? | ❌ Not reliably | Prophet can produce different predictions for each discount, but the difference is not necessarily a causal effect. |
+| Identify the optimal discount to maximize profit? | ❌ Not on its own | This requires reliable estimates of price response, margins, costs and an optimization approach. |
+| Recover demand lost during stockouts? | ❌ Not directly | Prophet forecasts from the available data but doesn't automatically reconstruct unobserved demand. |
+| Guarantee accurate forecasts for future Black Weeks? | ❌ No | Forecast accuracy depends on data quality, historical patterns and how representative past events are of future conditions. |
+
+The distinction I want to keep in mind throughout this project is that **forecasting demand under a planned discount is not the same as measuring the causal impact of that discount**.
+
+For example, Prophet might predict 100 units with a 10% discount and 140 units with a 30% discount. However, this doesn't prove that increasing the discount would generate 40 additional sales. The historical relationship could also reflect other factors, such as marketing activity, seasonality or the timing of promotions.
+
+For this exercise, I'll focus on using promotional information to improve demand forecasting and support inventory planning, rather than attempting to optimize discount strategies.
 
 
 
