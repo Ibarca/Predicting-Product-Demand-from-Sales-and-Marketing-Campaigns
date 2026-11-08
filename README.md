@@ -38,24 +38,21 @@ Of course, adding more variables doesn't necessarily improve forecast accuracy. 
 
 
 
+
 ## 2. The Objective
 
 For this exercise, I'll use synthetic data from a fictional consumer-electronics retailer to forecast product-level demand for **Black Week 2026 (23–30 November)**.
 
-The goal is to estimate expected demand using historical sales, promotional events and planned discounts, and explore how these forecasts could support inventory planning.
+Building on my previous project, I want to explore how incorporating promotional events and planned discounts into Prophet can help estimate demand more accurately, and how these forecasts could support inventory planning.
 
-I'll also backtest the approach against Black Week 2025 to understand whether incorporating promotional information improves forecast accuracy.
+But before forecasting 2026, I want to answer one question: **Does adding promotional information actually improve forecast accuracy, and if so, by how much?**
 
-Rather than revisiting Prophet's fundamentals, which I covered in my previous project, I'll focus on applying these new concepts to a practical e-commerce demand-planning problem.
+To find out, I'll backtest the approach against Black Week 2025, comparing a basic Prophet model with versions that include promotional events and discount information.
+
+I won't revisit the fundamentals of Prophet, as I already covered those in my [previous project](https://github.com/Ibarca/Building-My-First-Sales-Forecast-in-Python-with-Prophet/blob/7d96a4d40f1ad34093ce58e52e6a35fa6e6f112e/README.md). Instead, I'll focus on introducing these additional variables, evaluating their impact and translating the final forecast into practical demand-planning insights.
 
 *All data used in this project is synthetic. The retailer and products are fictional.*
 
-
-**Does adding discount information actually improve the forecast, and if so, by how much?**
-
-I won't go into the basics of Prophet again, as I already covered those in my [previous project](https://github.com/Ibarca/Building-My-First-Sales-Forecast-in-Python-with-Prophet/blob/7d96a4d40f1ad34093ce58e52e6a35fa6e6f112e/README.md).
-
-Instead, I'll focus on how to introduce a regressor, compare the results and see what this means from a demand-planning perspective.
 
 
 
