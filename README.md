@@ -64,116 +64,146 @@ By including discount percentage as a regressor, Prophet can learn from the hist
 
 For this exercise, I'll use synthetic data from a fictional consumer-electronics retailer to forecast product-level demand for **Black Week 2026 (23–30 November)**.
 
-This project builds on two previous exercises:
+The goal is to estimate expected demand using historical sales, promotional events and planned discounts, and explore how these forecasts could support inventory planning.
 
-1. [Building My First Sales Forecast in Python with Prophet](https://github.com/Ibarca/Building-My-First-Sales-Forecast-in-Python-with-Prophet/blob/7d96a4d40f1ad34093ce58e52e6a35fa6e6f112e/README.md), where I explored the fundamentals of forecasting with Prophet.
-2. [Forecast Validation with Prophet: Backtesting Using One Train-Test Split](https://github.com/Ibarca/Forecast-Validation-with-Prophet-Backtesting-Using-One-Train-Test-Split/blob/main/README.md), where I learned how to evaluate forecast accuracy using historical data.
+Before generating the 2026 forecast, I also want to answer one question: **Does incorporating promotional information improve forecast accuracy compared with using historical sales patterns alone?**
 
-This time, I want to go a step further by incorporating **promotional events and planned discounts** into Prophet and exploring how the resulting forecasts could support inventory planning.
+To explore this, I'll backtest the approach against Black Week 2025, comparing a basic Prophet model with versions that include promotional events and discount information. This will help me understand whether the additional variables provide useful predictive information, although one historical backtest won't be enough to establish that the same results will hold in future years.
 
-Before forecasting 2026, I also want to answer one question: **Does adding promotional information actually improve forecast accuracy, and if so, by how much?**
-
-To find out, I'll backtest the approach against Black Week 2025, comparing a basic Prophet model with versions that include promotional events and discount information.
-
-Rather than revisiting forecasting fundamentals or evaluation methods, I'll focus on introducing these additional variables, understanding their impact and translating the final forecast into practical demand-planning insights.
+Rather than revisiting forecasting fundamentals or evaluation methods, which I covered in my previous projects, I'll focus on introducing these additional variables, evaluating their contribution and translating the final forecast into practical demand-planning insights.
 
 *All data used in this project is synthetic. The retailer and products are fictional.*
 
+## 3. The Dataset
 
+For this exercise, I'm using synthetic data from a fictional consumer-electronics retailer, covering daily sales between January 2023 and October 2026, together with product information and a marketing calendar.
 
+The original catalogue contains 40 products, but not all of them are suitable for this exercise. Some were launched recently, while others have been discontinued or replaced by newer generations.
 
-## 1. The Challenge
+To keep the analysis focused, I've selected **21 established products** with sales history across Black Week 2023, 2024 and 2025 that remain active for Black Week 2026.
 
-Black Week creates demand patterns that are difficult to estimate from historical sales alone.
+The dataset includes three main files:
 
-Two factors can distort the picture:
-
-- **Stockouts:** Zero sales may mean that a product was unavailable, not that customers did not want it.
-- **Changing discounts:** The same product may have a different discount from one year to the next, affecting demand.
-
-A useful forecast therefore needs to account for the event itself and the promotion planned for the forecast period.
-
-## 2. The Approach
-
-The notebook builds forecasts for products with sales history across all three previous Black Weeks and compares a series of increasingly informed models.
-
-1. Explore daily sales, product information and the marketing calendar.
-2. Remove sold-out days from model training so unavailable products do not teach the model that demand was zero.
-3. Use Prophet to model historical sales patterns.
-4. Add Black Week and other promotions as event effects.
-5. Add the planned discount as an explanatory variable (regressor).
-6. Backtest the approaches by pretending the forecast was made on 12 October in 2024 and 2025.
-7. Compare forecasts with actual sales using weighted absolute percentage error (WAPE).
-8. Combine the model forecast with the simple "same as last year" benchmark.
-
-The forecast for 2026 uses sales data through **12 October 2026** and the discounts in the 2026 promotion plan.
-
-## 3. Results
-
-The backtest highlights that knowing when Black Week takes place matters more than adding every available variable. Discount information also helps, particularly when the planned discount differs from previous years. Other promotion events add little in this particular test.
-
-| Method | 2024 WAPE | 2025 WAPE |
-|---|---:|---:|
-| Same as last year | 22% | 11% |
-| Prophet with event, promotion and discount information | 15% | 12% |
-| Average of both approaches | 18% | 8% |
-
-The combined approach is used for the final planning forecast. It balances the familiar year-on-year benchmark with a model that can account for event and discount information.
-
-## 4. Black Week 2026 Forecast
-
-For the 21 established products included in the analysis:
-
-| Planning measure | Units |
-|---|---:|
-| Forecast demand | **3,793** |
-| Low planning estimate | 2,713 |
-| High planning estimate | 4,511 |
-| Black Week 2025 sales for the same products | 3,510 |
-
-The notebook also produces:
-
-- A product-level forecast and planning range.
-- A comparison with the previous year's sales and discounts.
-- Notes highlighting products that sold out during the previous Black Week or have a changed planned discount.
-- An indicative daily demand profile to help think about operational workload.
-
-The low and high estimates are historical error-based planning ranges, not guaranteed outcomes.
-
-## 5. Data
-
-The project uses four input files:
-
-| File | Description |
+| Dataset | Information |
 |---|---|
-| `sales_daily.csv` | Daily units sold, discount and stockout flag by product |
-| `products.csv` | Product catalogue |
-| `marketing_calendar.csv` | Promotional events from 2023 to 2026 |
-| `promotion_plan_2026.csv` | Planned discounts for the remainder of 2026 |
+| `sales_daily.csv` | Daily sales, discounts and stockout information |
+| `products.csv` | Product catalogue and lifecycle dates |
+| `marketing_calendar.csv` | Historical and planned promotional events |
 
-## 6. Tools & Technologies
+### Handling Stockouts
 
-- Python
-- pandas and NumPy
-- Matplotlib
-- Prophet
-- Jupyter Notebook
+One important consideration when forecasting demand is that **observed sales don't always represent actual demand**.
 
-## 7. Limitations
+If a product runs out of stock, sales may fall even though customers still want to purchase it. Training a model on these observations without accounting for stock availability could lead to underestimating demand.
 
-- **Synthetic data:** The results illustrate a method; they are not evidence of performance for a real retailer.
-- **Limited history:** The analysis has at most three previous Black Weeks, with only two backtesting years.
-- **Stockout treatment:** Sold-out days are excluded from model training, but lost demand is not explicitly estimated.
-- **Discount assumptions:** The model learns discount effects from historical observations. Discounts outside the historical range are uncertain.
-- **Product scope:** Newer products without sufficient Black Week history require a different forecasting approach.
-- **Promotional coverage:** The marketing calendar is shop-wide and may not mean every product participates in every promotion.
+Fortunately, the dataset includes a `stockout_flag` identifying affected observations. I'll exclude these days from model training rather than treating them as normal demand observations.
 
-## 8. Key Takeaway
+This doesn't recover the demand that was lost during stockouts, but it avoids teaching the model that constrained sales necessarily reflect lower customer interest. I'll keep the original observations for historical reporting and exclude stockout-affected days from the main accuracy calculation.
 
-Demand planning is not just about extrapolating last year's sales. It requires understanding what makes the forecast period different: event timing, promotional mechanics and product availability.
+## 4. Preparing the Promotional Variables
 
-The goal is to turn that context into a forecast that supports better inventory and operational decisions.
+The next step is to prepare the additional information that Prophet will use alongside historical sales.
+
+### Promotional Events
+
+Black Week takes place every year, but its dates change. Rather than expecting Prophet's yearly seasonality to capture this moving event automatically, I'll explicitly identify the historical and planned promotional periods.
+
+For this exercise, I'll use Prophet's holiday functionality to represent Black Week dates. This allows the model to estimate an event effect separately from its regular seasonal patterns.
+
+However, there are only three historical Black Weeks in the dataset, so the amount of information available to estimate this effect is limited.
+
+### Discount Percentage
+
+The second variable is the discount percentage applied to each product.
+
+I'll add this as an external regressor using Prophet's `add_regressor()` functionality, allowing the model to estimate how sales have historically varied with discount levels.
+
+For the final forecast, I'll provide the planned discounts for Black Week 2026. This is important because Prophet needs future values for external regressors when generating predictions.
+
+One challenge is that discounts and promotional events often occur together. For example, a retailer may offer its largest discounts during Black Week, when demand is already unusually high. This makes it difficult to distinguish the contribution of the discount from the effect of the event itself.
+
+For this reason, I'll interpret the discount regressor as a predictive variable rather than a measure of how much additional demand a particular discount will cause.
+
+## 5. Building and Evaluating the Forecast
+
+I'll train separate Prophet models for each of the 21 selected products, using daily sales history and the additional promotional information.
+
+Before generating the Black Week 2026 forecast, I'll evaluate the approach using a historical backtest. The idea is to recreate a forecasting exercise for Black Week 2025 using only the sales history available before that event.
+
+I'll compare three approaches:
+
+| Approach | Variables |
+|---|---|
+| Baseline Prophet | Historical sales, trend and seasonality |
+| Prophet + Events | Baseline plus promotional event indicators |
+| Prophet + Events + Discounts | Promotional events plus discount percentage |
+
+The comparison will help me understand whether the additional variables improve predictive performance. However, the main objective remains building a useful demand forecast, not identifying a universally superior model.
+
+### Evaluating Accuracy
+
+I'll evaluate the forecasts using **Weighted Absolute Percentage Error (WAPE)**, calculated as the sum of absolute forecast errors divided by the sum of observed sales.
+
+I'll calculate WAPE using non-stockout observations to avoid evaluating the model against sales that may have been constrained by inventory availability.
+
+For the discount-based backtest, I'll also distinguish between discounts that were known at the forecast cutoff and realized discounts. If only realized discounts are available, the evaluation will be conditional on those discounts and won't fully represent a real historical planning exercise.
+
+The results will help me decide how much confidence to place in the additional variables before forecasting 2026.
+
+**[Insert model comparison chart and backtesting results]**
+
+## 6. Forecasting Black Week 2026
+
+After evaluating the models, I'll use the available sales history through October 2026 and the planned promotional information to forecast demand for Black Week 2026.
+
+The forecast will focus on expected units sold for each product, allowing me to compare anticipated demand with historical Black Week performance.
+
+I'll look at three main questions:
+
+- How many units are expected to sell across the selected products?
+- Which products show the largest expected demand changes compared with 2025?
+- Which products deserve closer attention when preparing inventory?
+
+**[Insert total Black Week 2026 forecast]**
+
+**[Insert product-level forecast comparison]**
+
+The forecasts will represent estimates based on historical patterns and the planned promotional conditions, not guaranteed sales outcomes.
+
+## 7. Translating the Forecast into Demand Planning
+
+The most interesting part of this exercise is understanding how the forecasts could support commercial decisions.
+
+For example, if a product is expected to experience significantly higher demand than in the previous year, a retailer may want to review whether sufficient inventory will be available. Similarly, products with previous Black Week stockouts may deserve additional attention.
+
+However, forecasting demand is only one part of inventory planning. To calculate actual replenishment requirements, we would also need current stock levels, incoming deliveries, supplier lead times and potentially safety-stock targets.
+
+Since this exercise focuses on demand forecasting, I'll use the results to identify potential planning priorities rather than calculate exact purchase orders.
+
+**[Insert product-level planning recommendations based on actual results]**
+
+## 8. Limitations
+
+There are several limitations worth keeping in mind when interpreting the results.
+
+First, the dataset is synthetic, so the findings don't represent the performance of a real retailer.
+
+Second, the model has only three historical Black Weeks from which to learn promotional effects. This makes it difficult to draw strong conclusions about the relationship between discounts and demand.
+
+Third, excluding stockout-affected observations avoids treating constrained sales as normal demand, but it doesn't estimate the sales that were lost.
+
+Finally, the backtest focuses on Black Week 2025. Although this is useful for understanding the model's historical performance, additional evaluation periods would be needed to assess how reliably the approach performs across different years.
+
+## 9. Key Takeaways
+
+*To be completed after running the analysis.*
+
+With this project, I want to move beyond forecasting based only on trends and seasonality and explore how additional commercial information can be incorporated into Prophet.
+
+The main learning objective is to understand how promotional events and discount information affect the forecasting process, whether they provide useful predictive information and how the resulting forecasts can support demand planning.
+
+Ultimately, I'm interested in connecting the technical side of forecasting with the commercial decisions that retailers need to make before major promotional events.
 
 ---
 
-*This is an independent portfolio project using synthetic data. It is intended as a practical demonstration of demand-planning and commercial-analytics methods.*
+*All data used in this project is synthetic. The retailer and products are fictional.*
